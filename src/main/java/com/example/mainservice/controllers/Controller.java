@@ -26,8 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
     private final AuthClient authClient;
-    @GetMapping("/")
-    public ResponseEntity<?> home() {
-        return authClient.greeting();
+
+    @GetMapping("/test")
+    public String generateToken(){
+        return "test";
     }
 }

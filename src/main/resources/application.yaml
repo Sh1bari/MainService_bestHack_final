@@ -1,7 +1,6 @@
 server:
-  port: 8082
-  servlet:
-    context-path: /api
+  forward-headers-strategy: native
+  port: 8081
 spring:
   application:
     name: main-server
@@ -9,9 +8,24 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+  boot:
+    admin:
+      context-path: /admin-ui
+      ui:
+        public-url: /admin-ui/
 eureka:
+  instance:
+    hostname: localhost
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
       instance:
         preferIpAddress: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
