@@ -1,6 +1,7 @@
 package com.example.mainservice.controllers;
 
 import com.example.mainservice.feign.AuthClient;
+import com.example.mainservice.services.FCMService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.*;
@@ -8,10 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Vladimir Krasnov
@@ -26,9 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
     private final AuthClient authClient;
+    private final FCMService fcmService;
 
     @GetMapping("/test")
     public String generateToken(){
         return "test";
+    }
+    @PostMapping("/send")
+    public void generateToken(@RequestParam String token){
+        fcmService.sendNotification(token, "qwe", "qwe");
     }
 }
