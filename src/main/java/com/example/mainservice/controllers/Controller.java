@@ -31,7 +31,9 @@ public class Controller {
         return "test";
     }
     @PostMapping("/send")
-    public void generateToken(@RequestParam String token){
-        fcmService.sendNotification(token, "qwe", "qwe");
+    public void generateToken(@RequestParam String token,
+                              @RequestParam String title,
+                              @RequestParam String body){
+        fcmService.sendNotification(token, title, body);
     }
 }
