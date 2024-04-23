@@ -1,13 +1,26 @@
 package com.example.mainservice.services;
 
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.messaging.*;
 import lombok.*;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class FCMService {
+
+    public String getAccessToken() throws IOException {
+        GoogleCredentials googleCredentials = GoogleCredentials
+                .fromStream(new ClassPathResource("google-services.json").getInputStream())
+                .createScoped(Arrays.asList("SCOPES"));
+        googleCredentials.refresh();
+        return googleCredentials.getAccessToken().getTokenValue();
+    }
 
     public void sendNotification(String registrationToken, String title, String message){
         Message fcmMessage = Message.builder()

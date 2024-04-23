@@ -1,6 +1,7 @@
 package com.example.mainservice.controllers;
 
 import com.example.mainservice.feign.AuthClient;
+import com.example.mainservice.security.CustomUserDetails;
 import com.example.mainservice.services.FCMService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,8 +9,11 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * @author Vladimir Krasnov
@@ -27,8 +31,8 @@ public class Controller {
     private final FCMService fcmService;
 
     @GetMapping("/test")
-    public String generateToken(){
-        return "test";
+    public String generateToken(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        return customUserDetails.getUser().toString();
     }
     @PostMapping("/send")
     public void generateToken(@RequestParam String token,

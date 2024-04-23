@@ -13,6 +13,7 @@ import java.io.IOException;
 @Configuration
 public class FirebaseConfig {
 
+    @SuppressWarnings("deprecation")
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
         ClassPathResource serviceAccount = new ClassPathResource("google-services.json");
