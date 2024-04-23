@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -52,6 +53,15 @@ public class GlobalExceptionHandler {
         String message = exception.getBindingResult().getAllErrors().stream()
                 .map(o-> o.getDefaultMessage() + ", ")
                 .collect(Collectors.joining());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new AppError(400, message.substring(0, message.length() - 2)));
+    }
+    @ExceptionHandler({
+            PropertyReferenceException.class
+    })
+    public ResponseEntity<AppError> onPropertyReferenceException(PropertyReferenceException exception) {
+        String message = exception.getMessage();
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new AppError(400, message.substring(0, message.length() - 2)));

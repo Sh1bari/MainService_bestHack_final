@@ -5,6 +5,8 @@ import com.example.mainservice.models.entities.Department;
 import com.example.mainservice.models.models.requests.CreateDepartmentDtoReq;
 import com.example.mainservice.repositories.DepartmentRepo;
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -24,5 +26,9 @@ public class DepartmentService {
     public Department findById(UUID id){
         return departmentRepo.findById(id)
                 .orElseThrow(DepartmentNotFoundExc::new);
+    }
+
+    public Page<Department> findByPage(Pageable pageable){
+        return departmentRepo.findAll(pageable);
     }
 }
