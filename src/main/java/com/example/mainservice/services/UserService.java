@@ -7,6 +7,7 @@ import com.example.mainservice.repositories.UserRepo;
 import lombok.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -28,8 +29,14 @@ public class UserService {
                 .name(req.getName())
                 .middleName(req.getMiddleName())
                 .surname(req.getSurname())
+                .createDate(LocalDateTime.now())
                 .build();
         return userRepo.save(user);
     }
+    public User linkTokenToUser(User user, String token){
+        user.setPushToken(token);
+        return userRepo.save(user);
+    }
+
 
 }

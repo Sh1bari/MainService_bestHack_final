@@ -3,6 +3,9 @@ package com.example.mainservice.models.entities;
 import com.example.mainservice.models.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -20,12 +23,12 @@ public class UserDepartmentRole {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @ElementCollection(targetClass = UserRole.class)
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
-
-    private String name;
+    private List<UserRole> roles;
 }

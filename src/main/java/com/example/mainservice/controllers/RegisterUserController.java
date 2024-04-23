@@ -2,6 +2,8 @@ package com.example.mainservice.controllers;
 
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.CreateUserDto;
+import com.example.mainservice.models.models.responses.UserDtoRes;
+import com.example.mainservice.security.CustomUserDetails;
 import com.example.mainservice.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,6 +16,8 @@ import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +42,39 @@ public class RegisterUserController {
     @PostMapping("/auth/user")
     public ResponseEntity<?> createNewUser(@RequestBody @Valid CreateUserDto req){
         User user = userService.createNewUser(req);
+        //UserDtoRes res = UserDtoRes.mapFromEntity(user);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    @Operation(summary = "Привязать push токен")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/auth/user/token")
+    public ResponseEntity<UserDtoRes> linkPushToken(@RequestParam(name = "token") String token,
+                                           @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        User user = userService.linkTokenToUser(customUserDetails.getUser(), token);
+        UserDtoRes res = UserDtoRes.mapFromEntity(user);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
+    @Operation(summary = "Получить себя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/auth/user/me")
+    public ResponseEntity<UserDtoRes> getMe(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        User user = customUserDetails.getUser();
+        UserDtoRes res = UserDtoRes.mapFromEntity(user);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
 }

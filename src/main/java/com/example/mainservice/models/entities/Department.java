@@ -36,5 +36,6 @@ public class Department {
     private List<DepartmentPermission> canGetFrom = new ArrayList<>();
 
     @OneToMany(mappedBy = "department", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
-    private List<User> users = new ArrayList<>();
+    private List<UserDepartmentRole> userDepartmentRoles = new ArrayList<>();
+
 }

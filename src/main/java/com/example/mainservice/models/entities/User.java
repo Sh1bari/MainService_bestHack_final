@@ -32,12 +32,10 @@ public class User {
     @Basic
     private LocalDateTime createDate = LocalDateTime.now();
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "department_id")
-    private Department department;
-
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
-    private List<UserDepartmentRole> roles = new ArrayList<>();
+    private List<UserDepartmentRole> departmentRoles = new ArrayList<>();
+
+    private String pushToken;
 
     /*@Column(unique = true)
     private String mail;*/

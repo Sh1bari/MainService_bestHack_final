@@ -24,7 +24,7 @@ public class DepartmentDtoRes {
         DepartmentDtoRes res = DepartmentDtoRes.builder()
                 .id(d.getId())
                 .name(d.getName())
-                .amountOfPeople(d.getUsers().size())
+                .amountOfPeople(d.getUserDepartmentRoles().size())
                 .canSentTo(d.getCanSentTo().stream()
                         .map(DepartmentPermission::getDependentDepartment)
                         .map(o->{
