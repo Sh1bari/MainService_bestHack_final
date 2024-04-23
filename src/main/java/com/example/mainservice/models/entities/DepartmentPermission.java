@@ -14,9 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DepartmentPermission {
     @Id
-    @UuidGenerator
-    @Column(name = "id", nullable = false, updatable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "main_department_id")

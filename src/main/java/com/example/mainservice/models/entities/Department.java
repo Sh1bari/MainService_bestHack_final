@@ -22,6 +22,7 @@ public class Department {
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
+    @Column(unique = true)
     private String name;
 
     @Basic

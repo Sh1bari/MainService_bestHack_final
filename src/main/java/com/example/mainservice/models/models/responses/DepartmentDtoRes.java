@@ -22,6 +22,7 @@ public class DepartmentDtoRes {
 
     public static DepartmentDtoRes mapFromEntity(Department d){
         DepartmentDtoRes res = DepartmentDtoRes.builder()
+                .id(d.getId())
                 .name(d.getName())
                 .amountOfPeople(d.getUsers().size())
                 .canSentTo(d.getCanSentTo().stream()
