@@ -72,7 +72,7 @@ public class DepartmentController {
                                     schema = @Schema(implementation = DepartmentDtoRes.class))
                     })
     })
-    @PostMapping("/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DepartmentDtoRes> getById(@PathVariable(name = "id")UUID id){
         DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.findById(id));
         return ResponseEntity
