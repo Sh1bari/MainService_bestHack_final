@@ -56,6 +56,10 @@ public class UserSpecificationsBuilder {
         specifications.add(UserSpecifications.hasRole(role));
         return this;
     }
+    public UserSpecificationsBuilder hasRoleAndDepartment(UUID departmentId, UserRoleInDepartment role) {
+        specifications.add(UserSpecifications.hasRoleAndDepartment(departmentId, role));
+        return this;
+    }
 
     public Specification<User> build() {
         return specifications.stream().reduce(Specification::and).orElse(null);

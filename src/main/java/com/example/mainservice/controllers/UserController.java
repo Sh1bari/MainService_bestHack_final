@@ -58,9 +58,8 @@ public class UserController {
                 .withMiddleNameContains(middleName)
                 .withSurnameContains(surname)
                 .withUsernameContains(username)
-                .hasRole(role)
+                .hasRoleAndDepartment(departmentId, role)
                 .hasDepartment(hasDepartment)
-                .withDepartmentIdEquals(departmentId)
                 .build();
         Page<User> users = userService.getUserPage(spec, pageable);
         Page<UserDtoRes> res = users.map(UserDtoRes::mapFromEntityWithoutCanSendTo);

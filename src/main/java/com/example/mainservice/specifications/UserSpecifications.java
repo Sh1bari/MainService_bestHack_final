@@ -77,6 +77,32 @@ public class UserSpecifications {
             }
         };
     }
+    public static Specification<User> hasRoleAndDepartment(UUID departmentId, UserRoleInDepartment role) {
+        return (root, query, builder) -> {
+            Predicate predicate = builder.conjunction();
+
+            if (departmentId != null && role != null) {
+                Join<User, UserDepartmentRole> departmentRoleJoin = root.join("departmentRoles");
+                Join<UserDepartmentRole, Department> departmentJoin = departmentRoleJoin.join("department");
+
+                Predicate departmentIdPredicate = builder.equal(departmentJoin.get("id"), departmentId);
+                Predicate rolePredicate = builder.equal(departmentRoleJoin.get("role"), role);
+
+                predicate = builder.and(departmentIdPredicate, rolePredicate);
+            } else if (departmentId != null) {
+                Join<User, UserDepartmentRole> departmentRoleJoin = root.join("departmentRoles");
+                Join<UserDepartmentRole, Department> departmentJoin = departmentRoleJoin.join("department");
+
+                predicate = builder.equal(departmentJoin.get("id"), departmentId);
+            } else if (role != null) {
+                Join<User, UserDepartmentRole> departmentRoleJoin = root.join("departmentRoles");
+
+                predicate = builder.equal(departmentRoleJoin.get("role"), role);
+            }
+
+            return predicate;
+        };
+    }
     public static Specification<User> withDepartmentIdEquals(UUID departmentId) {
         return (root, query, builder) -> {
             if (departmentId != null) {
