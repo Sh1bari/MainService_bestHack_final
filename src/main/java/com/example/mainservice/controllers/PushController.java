@@ -21,12 +21,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @Validated
 @CrossOrigin
 @SecurityRequirement(name = "bearerAuth")
-@RequestMapping("/push")
+@RequestMapping("")
 @Tag(name = "Push API", description = "")
 public class PushController {
 
@@ -36,10 +38,11 @@ public class PushController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     //@PreAuthorize("isAuthenticated()")
-    @PostMapping("")
+    @PostMapping("/department/{id}/")
     public ResponseEntity<PushDtoRes> sendPush(@RequestBody @Valid PushSendDtoReq req,
-                                               @AuthenticationPrincipal CustomUserDetails customUserDetails){
-        Push push = pushService.createPush(req);
+                                               @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                               @PathVariable UUID id){
+        Push push = pushService.createPush(id, customUserDetails.getUser(), req);
         PushDtoRes res = PushDtoRes.mapFromEntity(push);
         return ResponseEntity
                 .status(HttpStatus.OK)

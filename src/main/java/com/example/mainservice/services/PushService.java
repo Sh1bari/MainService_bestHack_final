@@ -2,6 +2,7 @@ package com.example.mainservice.services;
 
 import com.example.mainservice.exceptions.PushHistoryNotFoundExc;
 import com.example.mainservice.exceptions.PushNotFoundExc;
+import com.example.mainservice.models.entities.Department;
 import com.example.mainservice.models.entities.Push;
 import com.example.mainservice.models.entities.PushHistory;
 import com.example.mainservice.models.entities.User;
@@ -20,14 +21,18 @@ import java.util.stream.Collectors;
 public class PushService {
     private final PushRepo pushRepo;
     private final PushHistoryRepo pushHistoryRepo;
+    private DepartmentService departmentService;
     private final UserService userService;
     private final FCMService fcmService;
 
     @Transactional
-    public Push createPush(PushSendDtoReq req){
+    public Push createPush(UUID departmentId, User fromU,PushSendDtoReq req){
+        Department dep = departmentService.findById(departmentId);
         Push push = new Push();
         push.setTitle(req.getTitle());
         push.setBody(req.getBody());
+        push.setCreatorUser(fromU);
+        push.setFromDepartment(dep);
         pushRepo.save(push);
         Set<User> userSet = userService.getUsersForSend(req.getToDepartmentRoles(), req.getToUserId())
                 .stream()
