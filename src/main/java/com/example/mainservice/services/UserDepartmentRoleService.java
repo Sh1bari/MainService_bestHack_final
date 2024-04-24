@@ -18,7 +18,8 @@ public class UserDepartmentRoleService {
     public UserDepartmentRole connectUserToDepartment(User user,
                                                       Department department,
                                                       List<UserRoleInDepartment> roles){
-        UserDepartmentRole udr = new UserDepartmentRole();
+        UserDepartmentRole udr = userDepartmentRoleRepo.findByUserAndDepartment(user, department)
+                        .orElse(new UserDepartmentRole());
         udr.setUser(user);
         udr.setDepartment(department);
         udr.setRoles(roles);

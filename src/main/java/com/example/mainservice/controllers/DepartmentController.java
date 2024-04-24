@@ -100,7 +100,7 @@ public class DepartmentController {
                 .body(res);
     }
 
-    @Operation(summary = "Привязать пользователя к отделу")
+    @Operation(summary = "Привязать пользователя к отделу / изменить права")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
@@ -113,6 +113,19 @@ public class DepartmentController {
                 .status(HttpStatus.OK)
                 .body(res);
     }
+
+    /*@Operation(summary = "Заменить ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PostMapping("/{id}/can-send-to")
+    public ResponseEntity<DepartmentDtoRes> updateCanSendTo(@PathVariable(name = "id")UUID id,
+                                                            @RequestBody @Valid ConnectUserToDepartmentDtoReq req){
+        DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.connectUserToDepartment(id, , req));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }*/
 
     @Operation(summary = "Список пользователей в отделе")
     @ApiResponses(value = {

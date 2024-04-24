@@ -68,7 +68,7 @@ public class RegisterUserController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/auth/user/me")
+    @GetMapping("/auth/user/me")
     public ResponseEntity<UserDtoRes> getMe(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         User user = customUserDetails.getUser();
         UserDtoRes res = UserDtoRes.mapFromEntity(user);
