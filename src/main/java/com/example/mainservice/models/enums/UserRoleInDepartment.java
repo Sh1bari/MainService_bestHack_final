@@ -2,8 +2,7 @@ package com.example.mainservice.models.enums;
 
 import lombok.*;
 
-public enum UserRole {
-    ROLE_ADMIN,
+public enum UserRoleInDepartment {
     ROLE_EMPLOYEE,
     ROLE_USER
 }

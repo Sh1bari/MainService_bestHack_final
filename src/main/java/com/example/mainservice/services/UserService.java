@@ -1,10 +1,13 @@
 package com.example.mainservice.services;
 
 import com.example.mainservice.exceptions.UserNotFoundExc;
+import com.example.mainservice.models.entities.Department;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.repositories.UserRepo;
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +20,11 @@ public class UserService {
 
     public User findByAuthId(UUID id){
         User user = userRepo.findByAuthId(id)
+                .orElseThrow(UserNotFoundExc::new);
+        return user;
+    }
+    public User findById(UUID id){
+        User user = userRepo.findById(id)
                 .orElseThrow(UserNotFoundExc::new);
         return user;
     }
@@ -37,6 +45,9 @@ public class UserService {
         user.setPushToken(token);
         return userRepo.save(user);
     }
+
+    /*public Page<User> getUsersByDepartment(UUID departmentId, Pageable pageable){
+    }*/
 
 
 }

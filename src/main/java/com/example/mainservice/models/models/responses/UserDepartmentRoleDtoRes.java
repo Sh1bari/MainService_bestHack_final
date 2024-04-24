@@ -1,7 +1,7 @@
 package com.example.mainservice.models.models.responses;
 
 import com.example.mainservice.models.entities.UserDepartmentRole;
-import com.example.mainservice.models.enums.UserRole;
+import com.example.mainservice.models.enums.UserRoleInDepartment;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class UserDepartmentRoleDtoRes {
     private UserDtoRes user;
     private DepartmentDtoRes department;
-    private List<UserRole> userRole;
+    private List<UserRoleInDepartment> userRole;
 
     public static UserDepartmentRoleDtoRes mapFromEntity(UserDepartmentRole u){
         UserDepartmentRoleDtoRes res = UserDepartmentRoleDtoRes.builder()

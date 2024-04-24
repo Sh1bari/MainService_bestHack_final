@@ -1,5 +1,6 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.models.models.requests.ConnectUserToDepartmentDtoReq;
 import com.example.mainservice.models.models.requests.CreateDepartmentDtoReq;
 import com.example.mainservice.models.models.responses.DepartmentDtoRes;
 import com.example.mainservice.services.DepartmentService;
@@ -47,6 +48,22 @@ public class DepartmentController {
                 .status(HttpStatus.OK)
                 .body(res);
     }
+    @Operation(summary = "Изменить отдел")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = DepartmentDtoRes.class))
+                    })
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<DepartmentDtoRes> update(@PathVariable(name = "id")UUID id,
+                                                   @RequestBody @Valid CreateDepartmentDtoReq req){
+        DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.update(req, id));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
 
     @Operation(summary = "Найти отделы")
     @ApiResponses(value = {
@@ -79,4 +96,33 @@ public class DepartmentController {
                 .status(HttpStatus.OK)
                 .body(res);
     }
+
+    @Operation(summary = "Привязать пользователя к отделу")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PostMapping("/{id}/user")
+    public ResponseEntity<DepartmentDtoRes> connectUserToDepartment(@PathVariable(name = "id")UUID id,
+                                                                    @RequestParam(name = "userId") UUID userId,
+                                                                    @RequestBody @Valid ConnectUserToDepartmentDtoReq req){
+        DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.connectUserToDepartment(id, userId, req));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
+    /*@Operation(summary = "Список пользователей в отделе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @GetMapping("/{id}/user")
+    public ResponseEntity<Page<DepartmentDtoRes>> getUsersByDepartment(@PathVariable(name = "id")UUID id,
+                                                                    @PageableDefault Pageable pageable){
+        DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.connectUserToDepartment(id, userId, req));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }*/
+
+
 }

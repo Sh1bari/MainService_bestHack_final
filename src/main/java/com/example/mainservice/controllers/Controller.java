@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +34,18 @@ public class Controller {
     @GetMapping("/test")
     public String generateToken(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         return customUserDetails.getUser().toString();
+    }
+    @GetMapping("/test/401")
+    public ResponseEntity<?> fo(){
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(401))
+                .build();
+    }
+    @GetMapping("/test/403")
+    public ResponseEntity<?> ft(){
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(403))
+                .build();
     }
     @PostMapping("/send")
     public void generateToken(@RequestParam String token,
