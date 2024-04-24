@@ -2,6 +2,7 @@ package com.example.mainservice.services;
 
 import com.example.mainservice.exceptions.UserNotFoundExc;
 import com.example.mainservice.models.entities.Department;
+import com.example.mainservice.models.entities.DepartmentPermission;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.UserRole;
 import com.example.mainservice.models.models.requests.CreateUserDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +65,12 @@ public class UserService {
     }
     public Page<User> getUserPage(Specification<User> spec, Pageable pageable){
         return userRepo.findAll(spec, pageable);
+    }
+    public Page<User> getUserPageCanSend(User user, Department department, Specification<User> spec, Pageable pageable){
+        Set<Department> set = department.getCanSendTo().stream()
+                .map(DepartmentPermission::getDependentDepartment).collect(Collectors.toSet());
+        set.add(department);
+        return userRepo.findAllByDepartmentRoles_departmentIn(set, spec, pageable);
     }
 
     public User updateUserInfo(UUID userId, UpdateUserDtoReq req){
