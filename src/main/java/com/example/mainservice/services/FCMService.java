@@ -48,6 +48,7 @@ public class FCMService {
                             .build())
                     .addAllTokens(tokens)
                     .build();
+            System.out.println("Send to " + tokens.toString());
             try {
                 BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
                 System.out.println("Successfully sent multicast message: " + response);
