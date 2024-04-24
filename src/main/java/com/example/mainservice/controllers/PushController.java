@@ -38,10 +38,10 @@ public class PushController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     //@PreAuthorize("isAuthenticated()")
-    @PostMapping("/department/{id}/")
-    public ResponseEntity<PushDtoRes> sendPush(@RequestBody @Valid PushSendDtoReq req,
-                                               @AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                               @PathVariable UUID id){
+    @PostMapping("/department/push")
+    public ResponseEntity<PushDtoRes> sendPush(@RequestParam UUID id,
+                                               @RequestBody @Valid PushSendDtoReq req,
+                                               @AuthenticationPrincipal CustomUserDetails customUserDetails){
         Push push = pushService.createPush(id, customUserDetails.getUser(), req);
         PushDtoRes res = PushDtoRes.mapFromEntity(push);
         return ResponseEntity

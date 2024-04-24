@@ -28,12 +28,14 @@ public class PushService {
 
     @Transactional
     public Push createPush(UUID departmentId, User fromU,PushSendDtoReq req){
-        Department dep = departmentService.findById(departmentId);
         Push push = new Push();
         push.setTitle(req.getTitle());
         push.setBody(req.getBody());
+        if(departmentId!=null){
+            Department dep = departmentService.findById(departmentId);
+            push.setFromDepartment(dep);
+        }
         push.setCreatorUser(fromU);
-        push.setFromDepartment(dep);
         pushRepo.save(push);
         Set<User> userSet = userService.getUsersForSend(req.getToDepartmentRoles(), req.getToUserId())
                 .stream()
