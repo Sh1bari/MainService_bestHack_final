@@ -5,6 +5,8 @@ import com.example.mainservice.models.entities.Department;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.UserRole;
 import com.example.mainservice.models.models.requests.CreateUserDto;
+import com.example.mainservice.models.models.requests.SendToDepartmentRolesDtoReq;
+import com.example.mainservice.models.models.requests.SendToUserIdDtoReq;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.repositories.UserRepo;
 import lombok.*;
@@ -14,12 +16,25 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepo userRepo;
+
+    public Set<User> getUsersForSend(List<SendToDepartmentRolesDtoReq> toDepartmentRoles,
+                                     List<SendToUserIdDtoReq> toUserId){
+        Set<User> res = new HashSet<>();
+        toDepartmentRoles.forEach(o->{
+            res.addAll(userRepo.findAllByDepartmentRoles_department_idAndDepartmentRoles_roles(o.getDepartmentId(), o.getRoles()));
+        });
+        res.addAll(userRepo.findAllByIds(toUserId.stream().map(SendToUserIdDtoReq::getUserId).toList()));
+        return res;
+    }
 
     public User findByAuthId(UUID id){
         User user = userRepo.findByAuthId(id)
