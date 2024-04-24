@@ -37,8 +37,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String tokenType = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            Claims claims = JwtUtil.getClaims(jwt).getBody();
             try {
+                Claims claims = JwtUtil.getClaims(jwt).getBody();
                 tokenType = claims.get("tokenType").toString();
                 if(tokenType.equals("access")){
                     userId = UUID.fromString(claims.get("sub").toString());
