@@ -4,6 +4,7 @@ import com.example.mainservice.exceptions.PushHistoryNotFoundExc;
 import com.example.mainservice.exceptions.PushNotFoundExc;
 import com.example.mainservice.models.entities.Push;
 import com.example.mainservice.models.entities.PushHistory;
+import com.example.mainservice.models.models.requests.PushSendDtoReq;
 import com.example.mainservice.repositories.PushHistoryRepo;
 import com.example.mainservice.repositories.PushRepo;
 import lombok.*;
@@ -17,9 +18,13 @@ public class PushService {
     private final PushRepo pushRepo;
     private final PushHistoryRepo pushHistoryRepo;
 
-    /*public Push createPush(){
-
-    }*/
+    public Push createPush(PushSendDtoReq req){
+        Push push = new Push();
+        push.setTitle(req.getTitle());
+        push.setBody(req.getBody());
+        pushRepo.save(push);
+        return push;
+    }
     public PushHistory findById(Long id){
         return pushHistoryRepo.findById(id)
                 .orElseThrow(PushHistoryNotFoundExc::new);

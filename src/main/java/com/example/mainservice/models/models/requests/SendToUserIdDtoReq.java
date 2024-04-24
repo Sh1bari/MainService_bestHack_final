@@ -1,10 +1,13 @@
 package com.example.mainservice.models.models.requests;
 
 import lombok.*;
+
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendToDtoReq {
-    private String bob;
+public class SendToUserIdDtoReq {
+    private UUID userId;
 }
