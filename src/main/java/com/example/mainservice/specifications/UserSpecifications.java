@@ -86,7 +86,7 @@ public class UserSpecifications {
                 Join<UserDepartmentRole, Department> departmentJoin = departmentRoleJoin.join("department");
 
                 Predicate departmentIdPredicate = builder.equal(departmentJoin.get("id"), departmentId);
-                Predicate rolePredicate = builder.equal(departmentRoleJoin.get("role"), role);
+                Predicate rolePredicate = builder.isMember(role, departmentRoleJoin.get("roles"));
 
                 predicate = builder.and(departmentIdPredicate, rolePredicate);
             } else if (departmentId != null) {
@@ -97,7 +97,7 @@ public class UserSpecifications {
             } else if (role != null) {
                 Join<User, UserDepartmentRole> departmentRoleJoin = root.join("departmentRoles");
 
-                predicate = builder.equal(departmentRoleJoin.get("role"), role);
+                predicate = builder.isMember(role, departmentRoleJoin.get("roles"));
             }
 
             return predicate;
