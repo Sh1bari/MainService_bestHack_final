@@ -16,10 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +27,7 @@ public class UserService {
                                      List<SendToUserIdDtoReq> toUserId){
         Set<User> res = new HashSet<>();
         toDepartmentRoles.forEach(o->{
-            res.addAll(userRepo.findAllByDepartmentRoles_department_idAndDepartmentRoles_roles(o.getDepartmentId(), o.getRoles()));
+            res.addAll(userRepo.findAllByDepartmentRoles_department_idAndDepartmentRoles_rolesIn(o.getDepartmentId(), Collections.singleton(o.getRoles())));
         });
         res.addAll(userRepo.findAllByIds(toUserId.stream().map(SendToUserIdDtoReq::getUserId).toList()));
         return res;

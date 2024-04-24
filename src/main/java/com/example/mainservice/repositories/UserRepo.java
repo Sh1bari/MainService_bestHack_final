@@ -10,14 +10,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public interface UserRepo extends JpaRepository<User, UUID> {
     Optional<User> findByAuthId(UUID authid);
-    Set<User> findAllByDepartmentRoles_department_idAndDepartmentRoles_roles(UUID id, List<UserRoleInDepartment> role);
+    Set<User> findAllByDepartmentRoles_department_idAndDepartmentRoles_rolesIn(UUID departmentRoles_department_id, Collection<List<UserRoleInDepartment>> departmentRoles_roles);
     @Query("SELECT u FROM User u WHERE u.id IN :ids")
     Set<User> findAllByIds(List<UUID> ids);
     Page<User> findAllByDepartmentRoles_department_id(UUID id, Pageable pageable);

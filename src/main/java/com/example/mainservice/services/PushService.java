@@ -13,6 +13,7 @@ import lombok.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,8 +40,10 @@ public class PushService {
                 .filter(o->o.getPushToken()!=null)
                 .collect(Collectors.toSet());
         Set<PushHistory> pushSet = new HashSet<>();
+        LocalDateTime time = LocalDateTime.now();
         userSet.forEach(o->{
             PushHistory ph = new PushHistory();
+            ph.setPushTime(time);
             ph.setPush(push);
             ph.setToUser(o);
             pushSet.add(ph);
