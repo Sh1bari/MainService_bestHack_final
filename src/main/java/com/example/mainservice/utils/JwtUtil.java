@@ -62,7 +62,7 @@ public class JwtUtil {
                     .setSigningKey(publicKey)
                     .parseClaimsJws(token);
             return claimsJws;
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (Exception e) {
             throw new WrongTokenExc();
         }
     }
