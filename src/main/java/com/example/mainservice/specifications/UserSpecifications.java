@@ -50,14 +50,12 @@ public class UserSpecifications {
     }
     public static Specification<User> hasRole(UserRoleInDepartment role) {
         return (root, query, builder) -> {
-            Join<User, UserDepartmentRole> departmentRoleJoin = root.join("departmentRoles");
             if (role != null) {
+                Join<User, UserDepartmentRole> departmentRoleJoin = root.join("departmentRoles");
                 Predicate rolePredicate = builder.isMember(role, departmentRoleJoin.get("roles"));
                 return rolePredicate;
             } else {
-                // Если роль null, вернуть условие, которое всегда истинно,
-                // чтобы не применять фильтрацию по роли
-                return builder.conjunction();
+                return null;
             }
         };
     }
