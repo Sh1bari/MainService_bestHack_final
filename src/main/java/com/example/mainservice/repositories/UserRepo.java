@@ -12,5 +12,5 @@ import java.util.UUID;
 
 public interface UserRepo extends JpaRepository<User, UUID> {
     Optional<User> findByAuthId(UUID authid);
-    Page<User> findAllByDepartmentRoles_department(Department department, Pageable pageable);
+    Page<User> findAllByDepartmentRoles_department_id(UUID id, Pageable pageable);
 }

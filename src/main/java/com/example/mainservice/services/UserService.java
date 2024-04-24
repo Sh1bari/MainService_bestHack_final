@@ -46,8 +46,9 @@ public class UserService {
         return userRepo.save(user);
     }
 
-    /*public Page<User> getUsersByDepartment(UUID departmentId, Pageable pageable){
-    }*/
+    public Page<User> getUsersByDepartmentId(UUID departmentId, Pageable pageable){
+        return userRepo.findAllByDepartmentRoles_department_id(departmentId, pageable);
+    }
 
 
 }

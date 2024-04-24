@@ -30,7 +30,7 @@ public class Department {
 
 
     @OneToMany(mappedBy = "mainDepartment", orphanRemoval = true)
-    private List<DepartmentPermission> canSentTo = new ArrayList<>();
+    private List<DepartmentPermission> canSendTo = new ArrayList<>();
 
     @OneToMany(mappedBy = "dependentDepartment", orphanRemoval = true)
     private List<DepartmentPermission> canGetFrom = new ArrayList<>();

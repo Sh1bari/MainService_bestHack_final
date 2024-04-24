@@ -18,21 +18,22 @@ public class DepartmentDtoRes {
     private UUID id;
     private String name;
     private Integer amountOfPeople;
-    private List<DepartmentDtoRes> canSentTo;
+    private List<DepartmentDtoRes> canSendTo;
 
     public static DepartmentDtoRes mapFromEntity(Department d){
+        List<DepartmentDtoRes> list = d.getCanSendTo().stream()
+                .map(DepartmentPermission::getDependentDepartment)
+                .map(o->{
+                    DepartmentDtoRes dto = DepartmentDtoRes.mapFromEntity(o);
+                    dto.canSendTo = null;
+                    return dto;
+                })
+                .toList();
         DepartmentDtoRes res = DepartmentDtoRes.builder()
                 .id(d.getId())
                 .name(d.getName())
                 .amountOfPeople(d.getUserDepartmentRoles().size())
-                .canSentTo(d.getCanSentTo().stream()
-                        .map(DepartmentPermission::getDependentDepartment)
-                        .map(o->{
-                            DepartmentDtoRes dto = DepartmentDtoRes.mapFromEntity(o);
-                            dto.canSentTo = null;
-                            return dto;
-                        })
-                        .collect(Collectors.toList()))
+                .canSendTo(list.size()>0?list:null)
                 .build();
         return res;
     }

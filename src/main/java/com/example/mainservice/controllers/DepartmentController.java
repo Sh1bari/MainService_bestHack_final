@@ -3,7 +3,9 @@ package com.example.mainservice.controllers;
 import com.example.mainservice.models.models.requests.ConnectUserToDepartmentDtoReq;
 import com.example.mainservice.models.models.requests.CreateDepartmentDtoReq;
 import com.example.mainservice.models.models.responses.DepartmentDtoRes;
+import com.example.mainservice.models.models.responses.UserDtoRes;
 import com.example.mainservice.services.DepartmentService;
+import com.example.mainservice.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,6 +34,7 @@ import java.util.UUID;
 @Tag(name = "Department API", description = "")
 public class DepartmentController {
     private final DepartmentService departmentService;
+    private final UserService userService;
 
     @Operation(summary = "Создать отдел")
     @ApiResponses(value = {
@@ -111,18 +114,19 @@ public class DepartmentController {
                 .body(res);
     }
 
-    /*@Operation(summary = "Список пользователей в отделе")
+    @Operation(summary = "Список пользователей в отделе")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
-    @GetMapping("/{id}/user")
-    public ResponseEntity<Page<DepartmentDtoRes>> getUsersByDepartment(@PathVariable(name = "id")UUID id,
-                                                                    @PageableDefault Pageable pageable){
-        DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.connectUserToDepartment(id, userId, req));
+    @GetMapping("/{id}/users")
+    public ResponseEntity<Page<UserDtoRes>> getUsersByDepartment(@PathVariable(name = "id")UUID id,
+                                                                 @PageableDefault Pageable pageable){
+        Page<UserDtoRes> res = userService.getUsersByDepartmentId(id, pageable)
+                .map(UserDtoRes::mapFromEntity);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
-    }*/
+    }
 
 
 }
