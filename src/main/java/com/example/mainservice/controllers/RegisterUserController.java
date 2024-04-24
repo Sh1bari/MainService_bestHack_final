@@ -2,6 +2,7 @@ package com.example.mainservice.controllers;
 
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.CreateUserDto;
+import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.models.models.responses.UserDtoRes;
 import com.example.mainservice.security.CustomUserDetails;
 import com.example.mainservice.services.UserService;
@@ -20,6 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -72,6 +75,21 @@ public class RegisterUserController {
     public ResponseEntity<UserDtoRes> getMe(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         User user = customUserDetails.getUser();
         UserDtoRes res = UserDtoRes.mapFromEntity(user);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
+    @Operation(summary = "Изменить информацию о себе / о пользователе (если админ)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/auth/user")
+    public ResponseEntity<UserDtoRes> updateUser(@RequestParam(required = false) UUID userId,
+                                                 @RequestBody UpdateUserDtoReq req,
+                                                 @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        UserDtoRes res = UserDtoRes.mapFromEntity(userService.updateUserInfo(userId!=null? userId : customUserDetails.getUser().getId(), req));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);

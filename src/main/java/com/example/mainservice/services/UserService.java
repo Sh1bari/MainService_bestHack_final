@@ -4,10 +4,12 @@ import com.example.mainservice.exceptions.UserNotFoundExc;
 import com.example.mainservice.models.entities.Department;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.CreateUserDto;
+import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.repositories.UserRepo;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -43,6 +45,17 @@ public class UserService {
     }
     public User linkTokenToUser(User user, String token){
         user.setPushToken(token);
+        return userRepo.save(user);
+    }
+    public Page<User> getUserPage(Specification<User> spec, Pageable pageable){
+        return userRepo.findAll(spec, pageable);
+    }
+
+    public User updateUserInfo(UUID userId, UpdateUserDtoReq req){
+        User user = findById(userId);
+        user.setName(req.getName());
+        user.setMiddleName(req.getMiddleName());
+        user.setSurname(req.getSurname());
         return userRepo.save(user);
     }
 

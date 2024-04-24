@@ -40,4 +40,23 @@ public class UserDtoRes {
                 .build();
         return res;
     }
+    public static UserDtoRes mapFromEntityWithoutCanSendTo(User u){
+        UserDtoRes res = UserDtoRes.builder()
+                .id(u.getId())
+                .name(u.getName())
+                .middleName(u.getMiddleName())
+                .surname(u.getSurname())
+                .createDate(u.getCreateDate())
+                .username(u.getUsername())
+                .departmentRoles(u.getDepartmentRoles().stream()
+                        .map(o->{
+                            UserDepartmentRoleDtoRes udr = UserDepartmentRoleDtoRes.mapFromEntityWithoutUser(o);
+                            udr.getDepartment().setCanSendTo(null);
+                            return udr;
+                        })
+                        .toList()
+                )
+                .build();
+        return res;
+    }
 }

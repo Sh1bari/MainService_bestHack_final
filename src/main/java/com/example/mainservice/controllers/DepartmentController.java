@@ -1,11 +1,15 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.models.entities.Department;
+import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.ConnectUserToDepartmentDtoReq;
 import com.example.mainservice.models.models.requests.CreateDepartmentDtoReq;
 import com.example.mainservice.models.models.responses.DepartmentDtoRes;
 import com.example.mainservice.models.models.responses.UserDtoRes;
 import com.example.mainservice.services.DepartmentService;
 import com.example.mainservice.services.UserService;
+import com.example.mainservice.specifications.DepartmentSpecificationsBuilder;
+import com.example.mainservice.specifications.UserSpecificationsBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,12 +21,14 @@ import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -77,8 +83,12 @@ public class DepartmentController {
                     })
     })
     @GetMapping("")
-    public ResponseEntity<Page<DepartmentDtoRes>> getByPage(@PageableDefault Pageable pageable){
-        Page<DepartmentDtoRes> res = departmentService.findByPage(pageable).map(DepartmentDtoRes::mapFromEntity);
+    public ResponseEntity<Page<DepartmentDtoRes>> getByPage(@RequestParam(required = false) String name,
+                                                            @PageableDefault Pageable pageable){
+        Specification<Department> spec = new DepartmentSpecificationsBuilder()
+                .withNameContains(name)
+                .build();
+        Page<DepartmentDtoRes> res = departmentService.findByPage(spec, pageable).map(DepartmentDtoRes::mapFromEntity);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
@@ -114,18 +124,18 @@ public class DepartmentController {
                 .body(res);
     }
 
-    /*@Operation(summary = "Заменить ")
+    @Operation(summary = "Заменить список разрешенных отделов для отправки")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
-    @PostMapping("/{id}/can-send-to")
+    @PutMapping("/{id}/can-send-to")
     public ResponseEntity<DepartmentDtoRes> updateCanSendTo(@PathVariable(name = "id")UUID id,
-                                                            @RequestBody @Valid ConnectUserToDepartmentDtoReq req){
-        DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.connectUserToDepartment(id, , req));
+                                                            @RequestBody List<UUID> req){
+        DepartmentDtoRes res = DepartmentDtoRes.mapFromEntity(departmentService.updateCanSendTo(id,req));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
-    }*/
+    }
 
     @Operation(summary = "Список пользователей в отделе")
     @ApiResponses(value = {
@@ -135,7 +145,7 @@ public class DepartmentController {
     public ResponseEntity<Page<UserDtoRes>> getUsersByDepartment(@PathVariable(name = "id")UUID id,
                                                                  @PageableDefault Pageable pageable){
         Page<UserDtoRes> res = userService.getUsersByDepartmentId(id, pageable)
-                .map(UserDtoRes::mapFromEntity);
+                .map(UserDtoRes::mapFromEntityWithoutCanSendTo);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
