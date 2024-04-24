@@ -1,5 +1,6 @@
 package com.example.mainservice.models.entities;
 
+import com.example.mainservice.models.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -36,6 +37,9 @@ public class User {
     private List<UserDepartmentRole> departmentRoles = new ArrayList<>();
 
     private String pushToken;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole globalRole = UserRole.ROLE_USER;
 
     /*@Column(unique = true)
     private String mail;*/

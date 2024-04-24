@@ -3,6 +3,7 @@ package com.example.mainservice.services;
 import com.example.mainservice.exceptions.UserNotFoundExc;
 import com.example.mainservice.models.entities.Department;
 import com.example.mainservice.models.entities.User;
+import com.example.mainservice.models.enums.UserRole;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.repositories.UserRepo;
@@ -40,6 +41,7 @@ public class UserService {
                 .middleName(req.getMiddleName())
                 .surname(req.getSurname())
                 .createDate(LocalDateTime.now())
+                .globalRole(UserRole.ROLE_USER)
                 .build();
         return userRepo.save(user);
     }

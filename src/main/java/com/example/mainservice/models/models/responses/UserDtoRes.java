@@ -1,6 +1,7 @@
 package com.example.mainservice.models.models.responses;
 
 import com.example.mainservice.models.entities.User;
+import com.example.mainservice.models.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class UserDtoRes {
     private String username;
     private LocalDateTime createDate;
     private List<UserDepartmentRoleDtoRes> departmentRoles;
+    private UserRole globalRole;
 
     public static UserDtoRes mapFromEntity(User u){
         UserDtoRes res = UserDtoRes.builder()
@@ -30,6 +32,7 @@ public class UserDtoRes {
                 .surname(u.getSurname())
                 .createDate(u.getCreateDate())
                 .username(u.getUsername())
+                .globalRole(u.getGlobalRole())
                 .departmentRoles(u.getDepartmentRoles().stream()
                                 .map(o->{
                                     UserDepartmentRoleDtoRes udr = UserDepartmentRoleDtoRes.mapFromEntityWithoutUser(o);
