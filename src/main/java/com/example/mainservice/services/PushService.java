@@ -27,7 +27,7 @@ public class PushService {
     private final FCMService fcmService;
 
     @Transactional
-    public Push createPush(UUID departmentId, User fromU,PushSendDtoReq req){
+    public Push createPush(UUID departmentId, User fromUId,PushSendDtoReq req){
         Push push = new Push();
         push.setTitle(req.getTitle());
         push.setBody(req.getBody());
@@ -35,7 +35,8 @@ public class PushService {
             Department dep = departmentService.findById(departmentId);
             push.setFromDepartment(dep);
         }
-        push.setCreatorUser(fromU);
+        User user = userService.findById(fromUId.getId());
+        push.setCreatorUser(user);
         pushRepo.save(push);
         Set<User> userSet = userService.getUsersForSend(req.getToDepartmentRoles(), req.getToUserId())
                 .stream()

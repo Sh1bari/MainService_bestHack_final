@@ -40,19 +40,22 @@ public class FCMService {
     }
 
     public void sendNotification(List<String> tokens, String title, String body) {
-        MulticastMessage message = MulticastMessage.builder()
-                .setNotification(Notification.builder()
-                        .setTitle(title)
-                        .setBody(body)
-                        .build())
-                .addAllTokens(tokens)
-                .build();
-
         try {
-            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
-            System.out.println("Successfully sent multicast message: " + response);
-        } catch (FirebaseMessagingException e) {
-            System.err.println("Error sending multicast message: " + e.getMessage());
+            MulticastMessage message = MulticastMessage.builder()
+                    .setNotification(Notification.builder()
+                            .setTitle(title)
+                            .setBody(body)
+                            .build())
+                    .addAllTokens(tokens)
+                    .build();
+            try {
+                BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
+                System.out.println("Successfully sent multicast message: " + response);
+            } catch (FirebaseMessagingException e) {
+                System.err.println("Error sending multicast message: " + e.getMessage());
+            }
+        }catch (Exception e){
+
         }
     }
 }
