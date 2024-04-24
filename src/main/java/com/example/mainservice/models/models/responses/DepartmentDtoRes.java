@@ -24,7 +24,7 @@ public class DepartmentDtoRes {
         List<DepartmentDtoRes> list = d.getCanSendTo().stream()
                 .map(DepartmentPermission::getDependentDepartment)
                 .map(o->{
-                    DepartmentDtoRes dto = DepartmentDtoRes.mapFromEntity(o);
+                    DepartmentDtoRes dto = DepartmentDtoRes.mapFromEntityWithoutCanSendTo(o);
                     dto.canSendTo = null;
                     return dto;
                 })
@@ -34,6 +34,14 @@ public class DepartmentDtoRes {
                 .name(d.getName())
                 .amountOfPeople(d.getUserDepartmentRoles().size())
                 .canSendTo(list.size()>0?list:null)
+                .build();
+        return res;
+    }
+    public static DepartmentDtoRes mapFromEntityWithoutCanSendTo(Department d){
+        DepartmentDtoRes res = DepartmentDtoRes.builder()
+                .id(d.getId())
+                .name(d.getName())
+                .amountOfPeople(d.getUserDepartmentRoles().size())
                 .build();
         return res;
     }
