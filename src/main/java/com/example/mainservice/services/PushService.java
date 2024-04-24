@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class PushService {
     private final PushRepo pushRepo;
     private final PushHistoryRepo pushHistoryRepo;
-    private DepartmentService departmentService;
+    private final DepartmentService departmentService;
     private final UserService userService;
     private final FCMService fcmService;
 
