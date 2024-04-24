@@ -8,7 +8,10 @@ import jakarta.persistence.criteria.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class UserSpecifications {
 
@@ -18,6 +21,21 @@ public class UserSpecifications {
                 return null;
             }
             return builder.like(builder.lower(root.get("name")), "%" + keyword.toLowerCase() + "%");
+        };
+    }
+
+    public static Specification<User> hasDepartmentIn(Set<UUID> departments) {
+        return (root, query, builder) -> {
+            // Создаем соединение между таблицами User и UserDepartmentRole
+            Join<User, UserDepartmentRole> departmentRolesJoin = root.join("departmentRoles", JoinType.RIGHT);
+            // Создаем предикат для проверки наличия записей в departmentRoles
+            Predicate hasDepartmentRoles = builder.isNotEmpty(root.get("departmentRoles"));
+            // Создаем предикат для проверки, принадлежит ли запись departmentRoles одному из переданных департаментов
+            Predicate inDepartments = departmentRolesJoin.get("department").get("id").in(departments);
+            // Создаем предикат для комбинации условий
+            Predicate finalPredicate = builder.and(hasDepartmentRoles, inDepartments);
+            // Применяем предикат к запросу
+            return finalPredicate;
         };
     }
 

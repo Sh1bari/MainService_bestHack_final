@@ -10,6 +10,7 @@ import com.example.mainservice.models.models.requests.SendToDepartmentRolesDtoRe
 import com.example.mainservice.models.models.requests.SendToUserIdDtoReq;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.repositories.UserRepo;
+import com.example.mainservice.specifications.UserSpecifications;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,10 +68,7 @@ public class UserService {
         return userRepo.findAll(spec, pageable);
     }
     public Page<User> getUserPageCanSend(User user, Department department, Specification<User> spec, Pageable pageable){
-        Set<Department> set = department.getCanSendTo().stream()
-                .map(DepartmentPermission::getDependentDepartment).collect(Collectors.toSet());
-        set.add(department);
-        return userRepo.findAllByDepartmentRoles_departmentIn(set, spec, pageable);
+        return userRepo.findAll(spec, pageable);
     }
 
     public User updateUserInfo(UUID userId, UpdateUserDtoReq req){

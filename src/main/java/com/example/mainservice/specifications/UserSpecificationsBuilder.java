@@ -1,5 +1,6 @@
 package com.example.mainservice.specifications;
 
+import com.example.mainservice.models.entities.Department;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.UserRoleInDepartment;
 import lombok.*;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class UserSpecificationsBuilder {
@@ -19,6 +21,10 @@ public class UserSpecificationsBuilder {
 
     public UserSpecificationsBuilder withNameContains(String keyword) {
         specifications.add(UserSpecifications.nameContainsIgnoreCase(keyword));
+        return this;
+    }
+    public UserSpecificationsBuilder hasDepartmentIn(Set<UUID> departments) {
+        specifications.add(UserSpecifications.hasDepartmentIn(departments));
         return this;
     }
     public UserSpecificationsBuilder withDepartmentIdEquals(UUID departmentId) {

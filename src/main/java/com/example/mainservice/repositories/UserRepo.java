@@ -19,6 +19,5 @@ public interface UserRepo extends JpaRepository<User, UUID> {
     Set<User> findAllByIds(List<UUID> ids);
     Page<User> findAllByDepartmentRoles_department_id(UUID id, Pageable pageable);
 
-    Page<User> findAllByDepartmentRoles_departmentIn(Collection<Department> departmentRoles_department, Specification<User> spec, Pageable pageable);
     Page<User> findAll(Specification<User> spec, Pageable pageable);
 }

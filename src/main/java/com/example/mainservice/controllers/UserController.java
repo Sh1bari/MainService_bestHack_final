@@ -1,6 +1,7 @@
 package com.example.mainservice.controllers;
 
 import com.example.mainservice.models.entities.Department;
+import com.example.mainservice.models.entities.DepartmentPermission;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.UserRoleInDepartment;
 import com.example.mainservice.models.models.responses.UserDtoRes;
@@ -25,7 +26,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -82,15 +85,19 @@ public class UserController {
                                                                @PageableDefault Pageable pageable,
                                                                @PathVariable UUID id,
                                                                @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Department department = departmentService.findById(id);
+        Set<Department> set = department.getCanSendTo().stream()
+                .map(DepartmentPermission::getDependentDepartment).collect(Collectors.toSet());
+        set.add(department);
         Specification<User> spec = new UserSpecificationsBuilder()
                 .withNameContains(name)
                 .withMiddleNameContains(middleName)
                 .withSurnameContains(surname)
                 .withUsernameContains(username)
                 .hasRole(role)
+                .hasDepartmentIn(set.stream().map(Department::getId).collect(Collectors.toSet()))
                 .hasDepartment(hasDepartment)
                 .build();
-        Department department = departmentService.findById(id);
         Page<User> users = userService.getUserPageCanSend(customUserDetails.getUser(),
                 department, spec, pageable);
         Page<UserDtoRes> res = users.map(UserDtoRes::mapFromEntityWithoutCanSendTo);
