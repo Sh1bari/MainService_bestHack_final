@@ -1,25 +1,29 @@
+# Этап 1: Сборка приложения с зависимостями
 FROM maven:3.8.4-openjdk-17 AS build
 
-ARG PORT
-ARG HOST
-ENV PORT=${PORT}
-ENV HOST=HOST
-
-ARG JAR_FILE=*.jar
+# Установка рабочего каталога
 WORKDIR /build
-COPY src src
+
+# Копирование файлов проекта Maven
 COPY pom.xml pom.xml
 
-RUN --mount=type=cache,target=/root/.m2 \
-    mvn clean package && \
-    java -Djarmode=layertools \
-    -jar target/${JAR_FILE} \
-    extract --destination target/extracted
+# Скачивание зависимостей и сохранение их в отдельном слое
+RUN mvn dependency:go-offline
 
+# Копирование исходного кода
+COPY src src
+
+# Сборка приложения
+RUN mvn clean package -DskipTests=true 
+
+# Этап 2: Запуск приложения
 FROM bellsoft/liberica-openjdk-debian:17
+
+# Установка рабочего каталога
 WORKDIR /application
-COPY --from=build /build/target/extracted/application .
-COPY --from=build /build/target/extracted/dependencies .
-COPY --from=build /build/target/extracted/snapshot-dependencies .
-COPY --from=build /build/target/extracted/spring-boot-loader .
-ENTRYPOINT exec java org.springframework.boot.loader.JarLauncher ${0} ${@}
+
+# Копирование JAR-файла приложения из сборочного этапа
+COPY --from=build /build/target/*.jar application.jar
+
+# Запуск приложения
+CMD ["java", "-jar", "application.jar"]
