@@ -40,7 +40,7 @@ public class PushService {
         pushRepo.save(push);
         Set<User> userSet = userService.getUsersForSend(req.getToDepartmentRoles(), req.getToUserId())
                 .stream()
-                .filter(o->o.getPushToken()!=null)
+                .filter(o->o.getPushTokens().size()!=0)
                 .collect(Collectors.toSet());
         Set<PushHistory> pushSet = new HashSet<>();
         LocalDateTime time = LocalDateTime.now();
@@ -52,7 +52,9 @@ public class PushService {
             pushSet.add(ph);
         });
         fcmService.sendNotification(userSet.stream()
-                .map(User::getPushToken).toList(),
+                .map(User::getPushTokens)
+                .flatMap(List::stream)
+                .collect(Collectors.toList()),
                 req.getTitle(),
                 req.getBody());
         pushHistoryRepo.saveAll(pushSet);

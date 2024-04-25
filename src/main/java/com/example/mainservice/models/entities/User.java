@@ -36,7 +36,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
     private List<UserDepartmentRole> departmentRoles = new ArrayList<>();
 
-    private String pushToken;
+    @ElementCollection
+    @CollectionTable(name = "user_push_tokens", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "push_token")
+    private List<String> pushTokens = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private UserRole globalRole = UserRole.ROLE_USER;

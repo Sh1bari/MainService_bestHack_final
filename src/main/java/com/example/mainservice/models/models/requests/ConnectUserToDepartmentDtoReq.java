@@ -11,6 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConnectUserToDepartmentDtoReq {
-    @NotEmpty(message = "roles cant be empty")
     private List<UserRoleInDepartment> roles;
 }

@@ -61,7 +61,7 @@ public class UserService {
         return userRepo.save(user);
     }
     public User linkTokenToUser(User user, String token){
-        user.setPushToken(token);
+        user.getPushTokens().add(token);
         return userRepo.save(user);
     }
     public Page<User> getUserPage(Specification<User> spec, Pageable pageable){
