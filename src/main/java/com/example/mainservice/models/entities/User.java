@@ -6,9 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -39,7 +37,7 @@ public class User {
     @ElementCollection
     @CollectionTable(name = "user_push_tokens", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "push_token")
-    private List<String> pushTokens = new ArrayList<>();
+    private Set<String> pushTokens = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private UserRole globalRole = UserRole.ROLE_USER;
