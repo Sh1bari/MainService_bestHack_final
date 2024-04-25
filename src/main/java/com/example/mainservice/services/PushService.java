@@ -53,7 +53,7 @@ public class PushService {
         });
         fcmService.sendNotification(userSet.stream()
                 .map(User::getPushTokens)
-                .flatMap(List::stream)
+                .flatMap(Set::stream)
                 .collect(Collectors.toList()),
                 req.getTitle(),
                 req.getBody());
