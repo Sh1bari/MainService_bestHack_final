@@ -27,7 +27,7 @@ public class UserDepartmentRole {
     @Basic
     private LocalDateTime createTime = LocalDateTime.now();
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "department_id")
     private Department department;
 

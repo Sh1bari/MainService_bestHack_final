@@ -25,6 +25,7 @@ public class UserDepartmentRoleService {
         udr.setRoles(roles);
         if(roles.size() == 0){
             userDepartmentRoleRepo.delete(udr);
+            return udr;
         }
         return userDepartmentRoleRepo.save(udr);
     }
