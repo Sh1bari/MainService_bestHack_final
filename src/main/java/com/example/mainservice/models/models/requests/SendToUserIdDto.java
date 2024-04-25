@@ -8,6 +8,6 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendToUserIdDtoReq {
+public class SendToUserIdDto {
     private UUID userId;
 }

@@ -10,6 +10,8 @@ import com.example.mainservice.models.models.requests.PushSendDtoReq;
 import com.example.mainservice.repositories.PushHistoryRepo;
 import com.example.mainservice.repositories.PushRepo;
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +28,15 @@ public class PushService {
     private final UserService userService;
     private final FCMService fcmService;
 
+    public Page<Push> getPushes(Pageable pageable){
+        return pushRepo.findAll(pageable);
+    }
+
     @Transactional
     public Push createPush(UUID departmentId, User fromUId,PushSendDtoReq req){
+        LocalDateTime time = LocalDateTime.now();
         Push push = new Push();
+        push.setPushTime(time);
         push.setTitle(req.getTitle());
         push.setBody(req.getBody());
         if(departmentId!=null){
@@ -43,7 +51,6 @@ public class PushService {
                 .filter(o->o.getPushTokens().size()!=0)
                 .collect(Collectors.toSet());
         Set<PushHistory> pushSet = new HashSet<>();
-        LocalDateTime time = LocalDateTime.now();
         userSet.forEach(o->{
             PushHistory ph = new PushHistory();
             ph.setPushTime(time);
@@ -57,7 +64,8 @@ public class PushService {
                 .collect(Collectors.toList()),
                 req.getTitle(),
                 req.getBody());
-        pushHistoryRepo.saveAll(pushSet);
+        List<PushHistory> pushHistory = pushHistoryRepo.saveAll(pushSet);
+        push.getPushHistories().addAll(pushHistory);
         return push;
     }
     public PushHistory findById(Long id){

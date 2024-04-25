@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +47,20 @@ public class PushController {
                                                @AuthenticationPrincipal CustomUserDetails customUserDetails){
         Push push = pushService.createPush(id, customUserDetails.getUser(), req);
         PushDtoRes res = PushDtoRes.mapFromEntity(push);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
+    @Operation(summary = "Посмотреть историю пушей")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    //@PreAuthorize("isAuthenticated()")
+    @GetMapping("/pushes")
+    public ResponseEntity<Page<PushDtoRes>> getPushes(@PageableDefault Pageable pageable,
+                                                      @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Page<PushDtoRes> res = pushService.getPushes(pageable).map(PushDtoRes::mapFromEntityWithoutHistory);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);

@@ -62,4 +62,15 @@ public class UserDtoRes {
                 .build();
         return res;
     }
+    public static UserDtoRes mapFromEntityWithoutDepartmentRoles(User u){
+        UserDtoRes res = UserDtoRes.builder()
+                .id(u.getId())
+                .name(u.getName())
+                .middleName(u.getMiddleName())
+                .surname(u.getSurname())
+                .createDate(u.getCreateDate())
+                .username(u.getUsername())
+                .build();
+        return res;
+    }
 }

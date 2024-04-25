@@ -1,9 +1,13 @@
 package com.example.mainservice.models.entities;
 
+import com.example.mainservice.models.models.requests.SendToDepartmentRolesDto;
+import com.example.mainservice.models.models.requests.SendToUserIdDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +25,7 @@ public class Push {
     private String title;
     private String body;
     @OneToMany(mappedBy = "push", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
-    private List<PushHistory> pushHistories;
+    private List<PushHistory> pushHistories = new ArrayList<>();
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
@@ -30,4 +34,7 @@ public class Push {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "department_id")
     private Department fromDepartment;
+
+    @Basic
+    private LocalDateTime pushTime = LocalDateTime.now();
 }

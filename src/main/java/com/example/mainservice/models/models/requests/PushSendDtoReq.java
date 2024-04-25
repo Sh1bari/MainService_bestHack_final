@@ -11,6 +11,6 @@ import java.util.List;
 public class PushSendDtoReq {
     private String title;
     private String body;
-    private List<SendToDepartmentRolesDtoReq> toDepartmentRoles;
-    private List<SendToUserIdDtoReq> toUserId;
+    private List<SendToDepartmentRolesDto> toDepartmentRoles;
+    private List<SendToUserIdDto> toUserId;
 }

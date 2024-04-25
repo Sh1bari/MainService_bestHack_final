@@ -6,8 +6,8 @@ import com.example.mainservice.models.entities.DepartmentPermission;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.UserRole;
 import com.example.mainservice.models.models.requests.CreateUserDto;
-import com.example.mainservice.models.models.requests.SendToDepartmentRolesDtoReq;
-import com.example.mainservice.models.models.requests.SendToUserIdDtoReq;
+import com.example.mainservice.models.models.requests.SendToDepartmentRolesDto;
+import com.example.mainservice.models.models.requests.SendToUserIdDto;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.repositories.UserRepo;
 import com.example.mainservice.specifications.UserSpecifications;
@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepo userRepo;
 
-    public Set<User> getUsersForSend(List<SendToDepartmentRolesDtoReq> toDepartmentRoles,
-                                     List<SendToUserIdDtoReq> toUserId){
+    public Set<User> getUsersForSend(List<SendToDepartmentRolesDto> toDepartmentRoles,
+                                     List<SendToUserIdDto> toUserId){
         Set<User> res = new HashSet<>();
         toDepartmentRoles.forEach(o->{
             res.addAll(userRepo.findAllByDepartmentRoles_department_idAndDepartmentRoles_rolesIn(o.getDepartmentId(), Collections.singleton(o.getRoles())));
         });
-        res.addAll(userRepo.findAllByIds(toUserId.stream().map(SendToUserIdDtoReq::getUserId).toList()));
+        res.addAll(userRepo.findAllByIds(toUserId.stream().map(SendToUserIdDto::getUserId).toList()));
         return res;
     }
 

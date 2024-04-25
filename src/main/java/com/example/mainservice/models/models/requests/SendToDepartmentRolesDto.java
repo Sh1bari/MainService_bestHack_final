@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SendToDepartmentRolesDtoReq {
+public class SendToDepartmentRolesDto {
     private UUID departmentId;
     private List<UserRoleInDepartment> roles;
 }
