@@ -23,13 +23,14 @@ public class PushDtoRes {
     private List<PushHistoryDtoRes> history;
 
     public static PushDtoRes mapFromEntity(Push p){
+        DepartmentDtoRes dep = p.getFromDepartment()!=null? DepartmentDtoRes.mapFromEntityWithoutCanSendTo(p.getFromDepartment()): null;
         PushDtoRes res = PushDtoRes.builder()
                 .id(p.getId())
                 .title(p.getTitle())
                 .body(p.getBody())
                 .time(p.getPushTime().format(Formatter.formatter))
                 .creator(UserDtoRes.mapFromEntityWithoutDepartmentRoles(p.getCreatorUser()))
-                .fromDepartment(DepartmentDtoRes.mapFromEntityWithoutCanSendTo(p.getFromDepartment()))
+                .fromDepartment(dep)
                 .history(p.getPushHistories().stream().map(PushHistoryDtoRes::mapFromEntityWithoutPush).toList())
                 .build();
         return res;
