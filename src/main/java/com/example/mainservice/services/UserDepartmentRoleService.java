@@ -23,7 +23,7 @@ public class UserDepartmentRoleService {
         udr.setUser(user);
         udr.setDepartment(department);
         udr.setRoles(roles);
-        if(roles ==  null){
+        if(roles.size() == 0){
             userDepartmentRoleRepo.delete(udr);
         }
         return userDepartmentRoleRepo.save(udr);
