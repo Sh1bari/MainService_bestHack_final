@@ -36,13 +36,14 @@ public class PushDtoRes {
     }
 
     public static PushDtoRes mapFromEntityWithoutHistory(Push p){
+        DepartmentDtoRes dep = p.getFromDepartment()!=null? DepartmentDtoRes.mapFromEntityWithoutCanSendTo(p.getFromDepartment()): null;
         PushDtoRes res = PushDtoRes.builder()
                 .id(p.getId())
                 .time(p.getPushTime().format(Formatter.formatter))
                 .title(p.getTitle())
                 .body(p.getBody())
                 .creator(UserDtoRes.mapFromEntityWithoutDepartmentRoles(p.getCreatorUser()))
-                .fromDepartment(DepartmentDtoRes.mapFromEntityWithoutCanSendTo(p.getFromDepartment()))
+                .fromDepartment(dep)
                 .build();
         return res;
     }
