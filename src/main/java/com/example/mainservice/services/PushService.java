@@ -31,6 +31,9 @@ public class PushService {
     public Page<Push> getPushes(Pageable pageable){
         return pushRepo.findAll(pageable);
     }
+    public Push getPush(UUID id){
+        return findById(id);
+    }
 
     @Transactional
     public Push createPush(UUID departmentId, User fromUId,PushSendDtoReq req){

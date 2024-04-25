@@ -65,4 +65,18 @@ public class PushController {
                 .status(HttpStatus.OK)
                 .body(res);
     }
+
+    @Operation(summary = "Посмотреть пуш")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    //@PreAuthorize("isAuthenticated()")
+    @GetMapping("/push/{id}")
+    public ResponseEntity<PushDtoRes> getPush(
+            @AuthenticationPrincipal CustomUserDetails customUserDetails, @PathVariable UUID id){
+        PushDtoRes res = PushDtoRes.mapFromEntity(pushService.getPush(id));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
 }
