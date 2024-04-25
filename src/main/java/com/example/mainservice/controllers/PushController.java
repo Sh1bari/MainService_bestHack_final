@@ -45,7 +45,7 @@ public class PushController {
     })
     //@PreAuthorize("isAuthenticated()")
     @PostMapping("/department/push")
-    public ResponseEntity<PushDtoRes> sendPush(@RequestParam UUID id,
+    public ResponseEntity<PushDtoRes> sendPush(@RequestParam(required = false) UUID id,
                                                @RequestBody @Valid PushSendDtoReq req,
                                                @AuthenticationPrincipal CustomUserDetails customUserDetails){
         Push push = pushService.createPush(id, customUserDetails.getUser(), req);
