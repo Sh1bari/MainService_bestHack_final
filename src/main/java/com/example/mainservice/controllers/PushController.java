@@ -2,11 +2,13 @@ package com.example.mainservice.controllers;
 
 import com.example.mainservice.models.entities.Push;
 import com.example.mainservice.models.entities.User;
+import com.example.mainservice.models.enums.UserRoleInDepartment;
 import com.example.mainservice.models.models.requests.PushSendDtoReq;
 import com.example.mainservice.models.models.responses.PushDtoRes;
 import com.example.mainservice.models.models.responses.UserDtoRes;
 import com.example.mainservice.security.CustomUserDetails;
 import com.example.mainservice.services.PushService;
+import com.example.mainservice.specifications.PushSpecificationsBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,6 +18,7 @@ import jakarta.validation.Valid;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,9 +61,17 @@ public class PushController {
     })
     //@PreAuthorize("isAuthenticated()")
     @GetMapping("/pushes")
-    public ResponseEntity<Page<PushDtoRes>> getPushes(@PageableDefault Pageable pageable,
+    public ResponseEntity<Page<PushDtoRes>> getPushes(@RequestParam(required = false) UUID creatorUserId,
+                                                      @RequestParam(required = false) UUID fromDepartmentId,
+                                                      @RequestParam(required = false) UUID toUserId,
+                                                      @PageableDefault Pageable pageable,
                                                       @AuthenticationPrincipal CustomUserDetails customUserDetails){
-        Page<PushDtoRes> res = pushService.getPushes(pageable).map(PushDtoRes::mapFromEntityWithoutHistory);
+        Specification<Push> spec = new PushSpecificationsBuilder()
+                .byCreatorUserId(creatorUserId)
+                .byFromDepartmentId(fromDepartmentId)
+                .byToUserId(toUserId)
+                .build();
+        Page<PushDtoRes> res = pushService.getPushes(spec, pageable).map(PushDtoRes::mapFromEntityWithoutHistory);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);

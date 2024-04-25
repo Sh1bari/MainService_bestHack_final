@@ -12,6 +12,7 @@ import com.example.mainservice.repositories.PushRepo;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +29,8 @@ public class PushService {
     private final UserService userService;
     private final FCMService fcmService;
 
-    public Page<Push> getPushes(Pageable pageable){
-        return pushRepo.findAll(pageable);
+    public Page<Push> getPushes(Specification<Push> spec, Pageable pageable){
+        return pushRepo.findAll(spec, pageable);
     }
     public Push getPush(UUID id){
         return findById(id);
