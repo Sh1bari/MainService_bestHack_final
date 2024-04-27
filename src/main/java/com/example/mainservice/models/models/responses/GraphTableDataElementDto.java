@@ -1,5 +1,6 @@
 package com.example.mainservice.models.models.responses;
 
+import com.example.mainservice.models.entities.Product;
 import lombok.*;
 @Data
 @Builder
@@ -9,4 +10,10 @@ public class GraphTableDataElementDto {
     private ProductDtoRes product;
     private Long amount;
     private Double totalSpend;
+
+    public GraphTableDataElementDto(Product product, Long amount, Double totalSpend){
+        this.product = ProductDtoRes.mapFromEntity(product);
+        this.amount = amount;
+        this.totalSpend = totalSpend;
+    }
 }

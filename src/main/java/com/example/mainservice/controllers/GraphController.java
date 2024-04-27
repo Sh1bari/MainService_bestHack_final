@@ -42,7 +42,7 @@ public class GraphController {
                                                                        @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SS")LocalDateTime endTime,
                                                                        @RequestParam(required = false)String region){
         Specification<Order> spec = OrderGraphSpecification.orderTimeBetween(endTime, startTime);
-        List<GraphTableDataElementDto> res = graphTableService.getGraphTableDataElements(spec);
+        List<GraphTableDataElementDto> res = graphTableService.getGraphTableDataElements(startTime, endTime, region);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
