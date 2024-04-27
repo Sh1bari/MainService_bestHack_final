@@ -39,7 +39,7 @@ public class Migration {
             initUsers();
         }
         initRegions();
-        //initOrders();
+        initOrders();
     }
     public void initRegions(){
         if(!regionRepo.existsByName("Москва")) {
