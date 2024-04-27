@@ -52,4 +52,9 @@ public class UserService {
         user.setMiddleName(u.getMiddleName());
         return userRepo.save(user);
     }
+    public User getAchievement(User user){
+
+        return userRepo.save(user);
+    }
+
 }

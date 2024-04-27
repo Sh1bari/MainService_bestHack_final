@@ -4,6 +4,7 @@ import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
+import com.example.mainservice.models.models.responses.AchievementDtoRes;
 import com.example.mainservice.models.models.responses.OrderDtoRes;
 import com.example.mainservice.models.models.responses.UserDtoRes;
 import com.example.mainservice.repositories.OrderRepo;
@@ -60,5 +61,18 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .body(res);
     }
+
+    /*@Operation(summary = "Получить достижения")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @GetMapping("/user/achievement")
+    public ResponseEntity<AchievementDtoRes> getAchievement(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        User user = customUserDetails.getUser();
+        UserDtoRes res = UserDtoRes.mapFromEntity(userService.updateMe(user, req));
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }*/
 
 }

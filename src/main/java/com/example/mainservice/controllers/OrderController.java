@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,21 @@ public class OrderController {
     public ResponseEntity<OrderDtoRes> addProductToOrder(@RequestBody @Valid List<ProductInOrderDtoReq> req,
                                                          @AuthenticationPrincipal CustomUserDetails customUserDetails){
         Order order = orderService.putProductsToOrder(customUserDetails.getUser(), req);
+        OrderDtoRes res = OrderDtoRes.mapFromEntity(order);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
+    @Operation(summary = "Оформить покупку")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Возвращаю айди новой корзины")
+    })
+    @Secured("ROLE_USER")
+    @PostMapping("/order/complete")
+    public ResponseEntity<OrderDtoRes> completeOrder(@RequestParam String region,
+                                                     @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Order order = orderService.completeOrder(customUserDetails.getUser(), region);
         OrderDtoRes res = OrderDtoRes.mapFromEntity(order);
         return ResponseEntity
                 .status(HttpStatus.OK)
