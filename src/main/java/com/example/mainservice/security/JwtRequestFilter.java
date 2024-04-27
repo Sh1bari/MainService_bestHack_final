@@ -1,7 +1,5 @@
 package com.example.mainservice.security;
 
-import com.example.mainservice.models.entities.User;
-import com.example.mainservice.services.UserService;
 import com.example.mainservice.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -22,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
