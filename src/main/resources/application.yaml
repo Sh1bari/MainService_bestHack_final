@@ -13,7 +13,7 @@ spring:
       mode: always
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgresmainservice:5432/main-db
+    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:5432/main-db
     username: postgres
     password: postgres
   jpa:
@@ -36,7 +36,7 @@ eureka:
     preferIpAddress: true
   client:
     serviceUrl:
-      defaultZone: http://eureka:8761/eureka
+      defaultZone: http://${EUREKA_ADDRESS:localhost}:8761/eureka
       instance:
         preferIpAddress: true
 management:
