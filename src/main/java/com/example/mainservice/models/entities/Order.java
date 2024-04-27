@@ -24,6 +24,7 @@ public class Order {
     private User user;
 
     @Basic
+    @org.hibernate.annotations.Index(name = "idx_order_time")
     private LocalDateTime orderTime;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
