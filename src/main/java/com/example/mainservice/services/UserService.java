@@ -1,9 +1,12 @@
 package com.example.mainservice.services;
 
 import com.example.mainservice.exceptions.UserNotFoundExc;
+import com.example.mainservice.models.entities.Order;
 import com.example.mainservice.models.entities.User;
+import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
+import com.example.mainservice.repositories.OrderRepo;
 import com.example.mainservice.repositories.UserRepo;
 import lombok.*;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepo userRepo;
+    private final OrderRepo orderRepo;
     private final RoleService roleService;
 
     public User findById(UUID id){
@@ -34,6 +38,11 @@ public class UserService {
         user.setMiddleName(u.getMiddleName());
         user.setPhoneNumber(u.getPhoneNumber());
         user.getRoles().add(roleService.getUserRole());
+
+        Order order = new Order();
+        order.setUser(user);
+        order.setOrderStatus(OrderStatus.DRAFT);
+        orderRepo.save(order);
         return userRepo.save(user);
     }
 

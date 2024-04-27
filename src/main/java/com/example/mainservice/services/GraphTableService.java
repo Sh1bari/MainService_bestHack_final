@@ -3,6 +3,7 @@ package com.example.mainservice.services;
 import com.example.mainservice.models.entities.Order;
 import com.example.mainservice.models.entities.Product;
 import com.example.mainservice.models.entities.ProductOrder;
+import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.models.models.SumResult;
 import com.example.mainservice.models.models.responses.GraphTableDataElementDto;
 import com.example.mainservice.models.models.responses.ProductDtoRes;
@@ -52,6 +53,7 @@ public class GraphTableService {
         if (region != null) {
             predicate = cb.and(predicate, cb.equal(joinOrder.get("region").get("name"), region));
         }
+        predicate = cb.and(predicate, cb.equal(joinOrder.get("orderStatus"), OrderStatus.COMPLETED));
 
         query.where(predicate);
 

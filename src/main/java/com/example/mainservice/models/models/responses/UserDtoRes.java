@@ -21,6 +21,7 @@ public class UserDtoRes {
     private String surname;
     private String username;
     private List<String> roles;
+    private OrderDtoRes bag;
 
     public static UserDtoRes mapFromEntity(User u){
         UserDtoRes res = UserDtoRes.builder()

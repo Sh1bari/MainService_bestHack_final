@@ -1,12 +1,28 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.models.entities.Order;
+import com.example.mainservice.models.models.requests.ProductInOrderDtoReq;
+import com.example.mainservice.models.models.responses.OrderDtoRes;
+import com.example.mainservice.models.models.responses.ProductDtoRes;
+import com.example.mainservice.security.CustomUserDetails;
+import com.example.mainservice.services.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,5 +32,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("")
 @Tag(name = "Order API", description = "")
 public class OrderController {
-    //private final OrderSer
+    private final OrderService orderService;
+
+    @Operation(summary = "Добавить в заказ товары")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @Secured("ROLE_USER")
+    @PutMapping("/order")
+    public ResponseEntity<OrderDtoRes> addProductToOrder(@RequestBody @Valid List<ProductInOrderDtoReq> req,
+                                                         @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        Order order = orderService.putProductsToOrder(customUserDetails.getUser(), req);
+        OrderDtoRes res = OrderDtoRes.mapFromEntity(order);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
 }

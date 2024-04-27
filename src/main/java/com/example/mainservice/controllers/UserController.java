@@ -1,9 +1,12 @@
 package com.example.mainservice.controllers;
 
 import com.example.mainservice.models.entities.User;
+import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
+import com.example.mainservice.models.models.responses.OrderDtoRes;
 import com.example.mainservice.models.models.responses.UserDtoRes;
+import com.example.mainservice.repositories.OrderRepo;
 import com.example.mainservice.security.CustomUserDetails;
 import com.example.mainservice.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final OrderRepo orderRepo;
 
     @Operation(summary = "Получить себя")
     @ApiResponses(value = {
@@ -38,6 +42,7 @@ public class UserController {
     public ResponseEntity<UserDtoRes> getMe(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         User user = customUserDetails.getUser();
         UserDtoRes res = UserDtoRes.mapFromEntity(user);
+        res.setBag(OrderDtoRes.mapFromEntity(orderRepo.findByUserAndOrderStatus(user, OrderStatus.DRAFT)));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
