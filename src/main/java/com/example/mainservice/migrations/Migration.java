@@ -64,7 +64,7 @@ public class Migration {
             regionRepo.saveAll(regions);
         }
     }
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 15000)
     @Transactional
     public void runInitOrders() {
         if(inited) {
