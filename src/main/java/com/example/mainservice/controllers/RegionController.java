@@ -33,8 +33,8 @@ public class RegionController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @GetMapping("/regions")
-    public ResponseEntity<List<String>> getRegions(@RequestParam(required = false) String region){
-        List<String> res = regionRepo.findAllByNameContainingIgnoreCase(region).stream()
+    public ResponseEntity<List<String>> getRegions(@RequestParam(required = false, defaultValue = "") String region){
+        List<String> res = regionRepo.findAllByNameContainsIgnoreCase(region).stream()
                 .map(Region::getName).toList();
         return ResponseEntity
                 .status(HttpStatus.OK)

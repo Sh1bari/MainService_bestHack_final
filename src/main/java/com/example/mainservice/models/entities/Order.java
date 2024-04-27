@@ -1,5 +1,6 @@
 package com.example.mainservice.models.entities;
 
+import com.example.mainservice.models.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,4 +35,6 @@ public class Order {
     @JoinColumn(name = "region_id")
     private Region region;
 
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 }

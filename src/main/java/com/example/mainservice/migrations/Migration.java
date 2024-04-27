@@ -1,6 +1,7 @@
 package com.example.mainservice.migrations;
 
 import com.example.mainservice.models.entities.*;
+import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.repositories.*;
 import com.example.mainservice.services.RoleService;
 import com.example.mainservice.services.UserService;
@@ -92,6 +93,7 @@ public class Migration {
                         .user(user)
                         .orderTime(LocalDateTime.now())
                         .region(region)
+                        .orderStatus(OrderStatus.COMPLETED)
                         .build();
                 user.getOrders().add(order);
                 ProductOrder productOrder = ProductOrder.builder()

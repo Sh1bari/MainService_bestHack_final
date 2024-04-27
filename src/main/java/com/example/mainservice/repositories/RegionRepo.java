@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface RegionRepo extends JpaRepository<Region, Integer> {
     boolean existsByName(String name);
-    List<Region> findAllByNameContainingIgnoreCase(String name);
+    List<Region> findAllByNameContainsIgnoreCase(String name);
 }
