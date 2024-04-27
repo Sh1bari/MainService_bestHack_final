@@ -1,5 +1,6 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.migrations.Migration;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.services.UserService;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Service API", description = "")
 public class ServiceController {
     private final UserService userService;
+    private final Migration migration;
 
     @Operation(summary = "Service method")
     @ApiResponses(value = {
@@ -35,5 +37,14 @@ public class ServiceController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
+    }
+
+    @Operation(summary = "Service method")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PostMapping("/imitate")
+    public void stop(@RequestParam Boolean bool){
+        migration.inited = bool;
     }
 }

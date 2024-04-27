@@ -30,7 +30,7 @@ public class Migration {
     private final UserService userService;
     private final RoleService roleService;
     private final RegionRepo regionRepo;
-    private boolean inited = false;
+    public boolean inited = false;
     @Async
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
