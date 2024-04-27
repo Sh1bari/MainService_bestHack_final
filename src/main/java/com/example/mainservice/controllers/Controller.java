@@ -37,4 +37,11 @@ public class Controller {
                 .status(HttpStatusCode.valueOf(403))
                 .build();
     }
+
+    @GetMapping("/test/503")
+    public ResponseEntity<?> fon(){
+        return ResponseEntity
+                .status(HttpStatusCode.valueOf(503))
+                .build();
+    }
 }
