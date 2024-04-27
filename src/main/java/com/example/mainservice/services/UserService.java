@@ -3,6 +3,7 @@ package com.example.mainservice.services;
 import com.example.mainservice.exceptions.UserNotFoundExc;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.CreateUserDto;
+import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.repositories.UserRepo;
 import lombok.*;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,13 @@ public class UserService {
         user.setMiddleName(u.getMiddleName());
         user.setPhoneNumber(u.getPhoneNumber());
         user.getRoles().add(roleService.getUserRole());
+        return userRepo.save(user);
+    }
+
+    public User updateMe(User user, UpdateUserDtoReq u){
+        user.setName(u.getName());
+        user.setSurname(u.getSurname());
+        user.setMiddleName(u.getMiddleName());
         return userRepo.save(user);
     }
 }

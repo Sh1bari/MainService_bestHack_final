@@ -2,6 +2,7 @@ package com.example.mainservice.controllers;
 
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.models.requests.CreateUserDto;
+import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.models.models.responses.UserDtoRes;
 import com.example.mainservice.security.CustomUserDetails;
 import com.example.mainservice.services.UserService;
@@ -34,9 +35,22 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @GetMapping("/auth/user/me")
-    public ResponseEntity<?> createNewUser(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+    public ResponseEntity<UserDtoRes> getMe(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         User user = customUserDetails.getUser();
         UserDtoRes res = UserDtoRes.mapFromEntity(user);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
+    @Operation(summary = "Получить себя")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PutMapping("/auth/user/me")
+    public ResponseEntity<?> updateMe(@RequestBody UpdateUserDtoReq req, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+        User user = customUserDetails.getUser();
+        UserDtoRes res = UserDtoRes.mapFromEntity(userService.updateMe(user, req));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
