@@ -45,4 +45,23 @@ public class User {
 
     @Basic
     private LocalDateTime registrationTime = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    private List<Order> orders = new ArrayList<>();
+
+    public User(String username,
+                String name,
+                String middleName,
+                String surname,
+                String phoneNumber){
+        this.username = username;
+        this.name = name;
+        this.middleName = middleName;
+        this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.status = UserStatus.ACTIVE;
+        this.registrationTime = LocalDateTime.now();
+        this.roles = new ArrayList<>();
+        this.orders = new ArrayList<>();
+    }
 }

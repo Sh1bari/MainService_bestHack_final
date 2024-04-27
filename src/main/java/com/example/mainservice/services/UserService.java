@@ -13,6 +13,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepo userRepo;
+    private final RoleService roleService;
 
     public User findById(UUID id){
         return userRepo.findById(id)
@@ -31,6 +32,7 @@ public class UserService {
         user.setSurname(u.getSurname());
         user.setMiddleName(u.getMiddleName());
         user.setPhoneNumber(u.getPhoneNumber());
+        user.getRoles().add(roleService.getUserRole());
         return userRepo.save(user);
     }
 }
