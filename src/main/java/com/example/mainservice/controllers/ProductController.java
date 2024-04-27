@@ -37,7 +37,7 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @GetMapping("/products")
-    public ResponseEntity<List<ProductDtoRes>> getProducts(@RequestParam(required = false)String pattern,
+    public ResponseEntity<List<ProductDtoRes>> getProducts(@RequestParam(required = false, defaultValue = "")String pattern,
                                                            @PageableDefault Pageable pageable){
         List<ProductDtoRes> res = productService.findAllBySearch(pattern, pageable).stream()
                 .map(ProductDtoRes::mapFromEntity).toList();

@@ -48,7 +48,7 @@ public class UserController {
                 .body(res);
     }
 
-    @Operation(summary = "Получить себя")
+    @Operation(summary = "Обновить профиль")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
