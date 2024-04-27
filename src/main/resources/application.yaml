@@ -13,9 +13,9 @@ spring:
       mode: always
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:5432/main-db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${POSTGRES_ADDRESS:localhost}:5432/main-final
+    username: ${POSTGRES_USERNAME:root}
+    password: ${POSTGRES_PASSWORD:123}
   jpa:
     openInView: true
     show-sql: false
