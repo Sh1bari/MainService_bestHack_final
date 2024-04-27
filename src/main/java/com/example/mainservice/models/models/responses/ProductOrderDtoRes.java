@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductOrderDtoRes {
     private ProductDtoRes product;
-    private Long amount;
+    private Integer amount;
     private Double totalPrice;
 
     public static ProductOrderDtoRes mapFromEntity(ProductOrder pr){

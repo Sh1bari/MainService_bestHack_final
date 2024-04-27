@@ -25,7 +25,7 @@ public class ProductOrder {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private Long amount;
+    private Integer amount;
     private Double totalPrice;
 
 }

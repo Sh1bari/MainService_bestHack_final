@@ -87,7 +87,7 @@ public class Migration {
                 Product product = products.get(random.nextInt(products.size()));
                 User user = users.get(random.nextInt(users.size()));
                 Region region = regions.get(random.nextInt(regions.size()));
-                Long amount = (long) (random.nextInt(10) + 1);
+                Integer amount = (int) (random.nextInt(10) + 1);
                 Double totalPrice = amount * product.getPrice();
                 Order order = Order.builder()
                         .user(user)

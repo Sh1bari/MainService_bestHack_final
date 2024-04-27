@@ -26,7 +26,7 @@ public class OrderService {
             ProductOrder pr = new ProductOrder();
             pr.setOrder(order);
             pr.setProduct(productService.findById(product.getProductId()));
-            pr.setAmount(pr.getAmount());
+            pr.setAmount(product.getAmount());
             order.getProductOrders().add(pr);
         }
         return orderRepo.save(order);
