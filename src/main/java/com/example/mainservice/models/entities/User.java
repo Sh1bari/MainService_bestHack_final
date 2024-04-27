@@ -46,7 +46,7 @@ public class User {
     @Basic
     private LocalDateTime registrationTime = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
     public User(String username,

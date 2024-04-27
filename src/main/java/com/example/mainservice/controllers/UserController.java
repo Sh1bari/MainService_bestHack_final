@@ -48,7 +48,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @PutMapping("/auth/user/me")
-    public ResponseEntity<?> updateMe(@RequestBody UpdateUserDtoReq req, @AuthenticationPrincipal CustomUserDetails customUserDetails){
+    public ResponseEntity<UserDtoRes> updateMe(@RequestBody UpdateUserDtoReq req, @AuthenticationPrincipal CustomUserDetails customUserDetails){
         User user = customUserDetails.getUser();
         UserDtoRes res = UserDtoRes.mapFromEntity(userService.updateMe(user, req));
         return ResponseEntity

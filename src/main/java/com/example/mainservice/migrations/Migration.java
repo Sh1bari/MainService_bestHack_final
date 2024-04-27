@@ -1,11 +1,9 @@
 package com.example.mainservice.migrations;
 
 import com.example.mainservice.models.entities.*;
-import com.example.mainservice.repositories.OrderRepo;
-import com.example.mainservice.repositories.ProductOrderRepo;
-import com.example.mainservice.repositories.ProductRepo;
-import com.example.mainservice.repositories.UserRepo;
+import com.example.mainservice.repositories.*;
 import com.example.mainservice.services.RoleService;
+import com.example.mainservice.services.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +11,11 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 @RequiredArgsConstructor
@@ -25,24 +26,80 @@ public class Migration {
     private final ProductOrderRepo productOrderRepo;
     private final OrderRepo orderRepo;
     private final UserRepo userRepo;
+    private final UserService userService;
     private final RoleService roleService;
+    private final RegionRepo regionRepo;
 
     @Async
     @EventListener(ApplicationReadyEvent.class)
-    public void init() {
+    @Transactional
+    public void init() throws InterruptedException {
         initDb();
         if(userRepo.count() < 99){
             initUsers();
         }
-        initOrders();
+        initRegions();
+        //initOrders();
     }
+    public void initRegions(){
+        if(!regionRepo.existsByName("Москва")) {
+            List<Region> regions = new ArrayList<>();
+            List<String> russianRegionsData = Arrays.asList(
+                    "Москва", "Санкт-Петербург", "Московская область", "Свердловская область",
+                    "Новосибирская область", "Республика Татарстан", "Красноярский край",
+                    "Башкортостан", "Пермский край", "Приморский край", "Ростовская область",
+                    "Ставропольский край", "Ханты-Мансийский автономный округ — Югра",
+                    "Самарская область", "Челябинская область", "Иркутская область",
+                    "Нижегородская область", "Волгоградская область", "Омская область",
+                    "Кемеровская область", "Краснодарский край", "Воронежская область",
+                    "Тюменская область", "Саратовская область", "Тульская область",
+                    "Калининградская область", "Белгородская область", "Ульяновская область",
+                    "Ленинградская область", "Ярославская область"
+            );
 
-    public void initOrders(){
-        ProductOrder productOrder = new ProductOrder();
-        Order order = new Order();
+            for (String regionName : russianRegionsData) {
+                regions.add(new Region(regionName));
+            }
+            regionRepo.saveAll(regions);
+        }
+    }
+    @Transactional
+    public void initOrders() throws InterruptedException {
         List<Product> products = productRepo.findAll();
         List<User> users = userRepo.findAll();
+        List<Region> regions = regionRepo.findAll();
 
+        Random random = new Random();
+        while(true) {
+            for (int i = 0; i < 20; i++) {
+                List<ProductOrder> productOrders = new ArrayList<>();
+
+                int numOrders = random.nextInt(5) + 1;
+                for (int j = 0; j < numOrders; j++) {
+                    Product product = products.get(random.nextInt(products.size()));
+                    User user = users.get(random.nextInt(users.size()));
+                    Region region = regions.get(random.nextInt(regions.size()));
+                    Long amount = (long) (random.nextInt(10) + 1);
+                    Double totalPrice = amount * product.getPrice();
+                    Order order = Order.builder()
+                            .user(user)
+                            .orderTime(LocalDateTime.now())
+                            .region(region)
+                            .build();
+                    user.getOrders().add(order);
+                    ProductOrder productOrder = ProductOrder.builder()
+                            .product(product)
+                            .order(order)
+                            .amount(amount)
+                            .totalPrice(totalPrice)
+                            .build();
+                    productOrders.add(productOrder);
+                }
+                productOrderRepo.saveAll(productOrders);
+                int sleep = ThreadLocalRandom.current().nextInt(1000, 10001);
+                Thread.sleep(sleep);
+            }
+        }
     }
 
     public void initUsers(){
