@@ -27,11 +27,12 @@ public class User {
     @Column(unique = true)
     private String username;
 
+    @Column(unique = true)
+    private String phoneNumber;
+
     private String name;
     private String middleName;
     private String surname;
     @Basic
-    private LocalDateTime registrationTime;
-
-
+    private LocalDateTime registrationTime = LocalDateTime.now();
 }
