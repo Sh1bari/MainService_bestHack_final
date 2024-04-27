@@ -1,5 +1,6 @@
 package com.example.mainservice.security;
 
+import com.example.mainservice.models.entities.Role;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.services.UserService;
 import com.example.mainservice.utils.JwtUtil;
@@ -52,7 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             User user = userService.findByAuthId(userId);
-            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            List<SimpleGrantedAuthority> authorities = getSimpleGrantedAuthoritiesByUserId(user);
             UserDetails userDetails = new CustomUserDetails(user, authorities);
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     userDetails,
@@ -62,5 +63,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(token);
         }
         filterChain.doFilter(request, response);
+    }
+
+    private List<SimpleGrantedAuthority> getSimpleGrantedAuthoritiesByUserId(User user){
+
+        //Mapping roles to SimpleGrantedAuthority list
+        List<Role> roles = user.getRoles();
+        List<SimpleGrantedAuthority> grantedAuthorityList = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .toList();
+
+        return grantedAuthorityList;
     }
 }

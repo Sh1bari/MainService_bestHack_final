@@ -1,5 +1,6 @@
 package com.example.mainservice.models.entities;
 
+import com.example.mainservice.models.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
@@ -33,6 +34,15 @@ public class User {
     private String name;
     private String middleName;
     private String surname;
+
+    @ManyToMany
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus status = UserStatus.ACTIVE;
+
     @Basic
     private LocalDateTime registrationTime = LocalDateTime.now();
 }

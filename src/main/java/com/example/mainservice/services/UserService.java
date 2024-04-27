@@ -26,6 +26,7 @@ public class UserService {
     public User createNewUserByAuthService(CreateUserDto u){
         User user = new User();
         user.setName(u.getName());
+        user.setUsername(u.getUsername());
         user.setAuthId(u.getUserId());
         user.setSurname(u.getSurname());
         user.setMiddleName(u.getMiddleName());
