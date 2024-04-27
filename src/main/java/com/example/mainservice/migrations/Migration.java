@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +30,7 @@ public class Migration {
     private final UserService userService;
     private final RoleService roleService;
     private final RegionRepo regionRepo;
-
+    private boolean inited = false;
     @Async
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
@@ -39,7 +40,7 @@ public class Migration {
             initUsers();
         }
         initRegions();
-        initOrders();
+        inited = true;
     }
     public void initRegions(){
         if(!regionRepo.existsByName("Москва")) {
@@ -63,42 +64,45 @@ public class Migration {
             regionRepo.saveAll(regions);
         }
     }
+    @Scheduled(fixedRate = 5000)
     @Transactional
-    public void initOrders() throws InterruptedException {
+    public void runInitOrders() {
+        if(inited) {
+            initOrders();
+        }
+    }
+    @Transactional
+    public void initOrders() {
         List<Product> products = productRepo.findAll();
         List<User> users = userRepo.findAll();
         List<Region> regions = regionRepo.findAll();
 
         Random random = new Random();
-        while(true) {
-            for (int i = 0; i < 20; i++) {
-                List<ProductOrder> productOrders = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            List<ProductOrder> productOrders = new ArrayList<>();
 
-                int numOrders = random.nextInt(5) + 1;
-                for (int j = 0; j < numOrders; j++) {
-                    Product product = products.get(random.nextInt(products.size()));
-                    User user = users.get(random.nextInt(users.size()));
-                    Region region = regions.get(random.nextInt(regions.size()));
-                    Long amount = (long) (random.nextInt(10) + 1);
-                    Double totalPrice = amount * product.getPrice();
-                    Order order = Order.builder()
-                            .user(user)
-                            .orderTime(LocalDateTime.now())
-                            .region(region)
-                            .build();
-                    user.getOrders().add(order);
-                    ProductOrder productOrder = ProductOrder.builder()
-                            .product(product)
-                            .order(order)
-                            .amount(amount)
-                            .totalPrice(totalPrice)
-                            .build();
-                    productOrders.add(productOrder);
-                }
-                productOrderRepo.saveAll(productOrders);
-                int sleep = ThreadLocalRandom.current().nextInt(1000, 10001);
-                Thread.sleep(sleep);
+            int numOrders = random.nextInt(5) + 1;
+            for (int j = 0; j < numOrders; j++) {
+                Product product = products.get(random.nextInt(products.size()));
+                User user = users.get(random.nextInt(users.size()));
+                Region region = regions.get(random.nextInt(regions.size()));
+                Long amount = (long) (random.nextInt(10) + 1);
+                Double totalPrice = amount * product.getPrice();
+                Order order = Order.builder()
+                        .user(user)
+                        .orderTime(LocalDateTime.now())
+                        .region(region)
+                        .build();
+                user.getOrders().add(order);
+                ProductOrder productOrder = ProductOrder.builder()
+                        .product(product)
+                        .order(order)
+                        .amount(amount)
+                        .totalPrice(totalPrice)
+                        .build();
+                productOrders.add(productOrder);
             }
+            productOrderRepo.saveAll(productOrders);
         }
     }
 
