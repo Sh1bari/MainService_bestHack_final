@@ -1,5 +1,7 @@
 package com.example.mainservice.security;
 
+import com.example.mainservice.models.entities.User;
+import com.example.mainservice.services.UserService;
 import com.example.mainservice.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
