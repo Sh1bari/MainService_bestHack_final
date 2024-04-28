@@ -75,6 +75,9 @@ public class UserController {
     public ResponseEntity<AchievementDtoRes> getAchievement(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         User user = customUserDetails.getUser();
         AchievementDtoRes res = orderService.calculateRansomAmount(user);
+        if(res.getRansomAmount()==null){
+            res.setRansomAmount(0D);
+        }
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
