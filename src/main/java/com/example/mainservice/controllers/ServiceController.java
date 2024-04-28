@@ -38,6 +38,17 @@ public class ServiceController {
                 .status(HttpStatus.OK)
                 .build();
     }
+    @Operation(summary = "Service method")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success")
+    })
+    @PostMapping("/auth/user/admin")
+    public ResponseEntity<?> createNewUserAdmin(@RequestBody @Valid CreateUserDto req){
+        User user = userService.createNewUserByAuthService(req);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
 
     @Operation(summary = "Service method")
     @ApiResponses(value = {
