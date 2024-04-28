@@ -8,10 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 public class GraphTableDataElementDto {
     private ProductDtoRes product;
-    private Long amount;
+    private Integer amount;
     private Double totalSpend;
 
-    public GraphTableDataElementDto(Product product, Long amount, Double totalSpend){
+    public GraphTableDataElementDto(Product product, Integer amount, Double totalSpend){
         this.product = ProductDtoRes.mapFromEntity(product);
         this.amount = amount;
         this.totalSpend = totalSpend;
