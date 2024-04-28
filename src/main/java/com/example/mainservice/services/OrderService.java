@@ -9,6 +9,8 @@ import com.example.mainservice.repositories.OrderRepo;
 import com.example.mainservice.repositories.ProductOrderRepo;
 import com.example.mainservice.repositories.RegionRepo;
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,5 +53,10 @@ public class OrderService {
         order.setOrderStatus(OrderStatus.DRAFT);
         order.setUser(user);
         return orderRepo.save(no);
+    }
+    @Transactional
+    public Page<Order> getSelfOrderList(User user, Pageable pageable){
+        Page<Order> res = orderRepo.findAllByUserAndOrderStatus(user, OrderStatus.COMPLETED, pageable);
+        return res;
     }
 }

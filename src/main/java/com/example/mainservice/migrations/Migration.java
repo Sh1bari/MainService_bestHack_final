@@ -75,7 +75,7 @@ public class Migration {
     @Transactional
     public void initOrders() {
         List<Product> products = productRepo.findAll();
-        List<User> users = userRepo.findAll();
+        List<User> users = userRepo.findAllByAuthId(null);
         List<Region> regions = regionRepo.findAll();
 
         Random random = new Random();

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -60,6 +61,21 @@ public class OrderController {
                                                      @AuthenticationPrincipal CustomUserDetails customUserDetails){
         Order order = orderService.completeOrder(customUserDetails.getUser(), region);
         OrderDtoRes res = OrderDtoRes.mapFromEntity(order);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(res);
+    }
+
+    @Operation(summary = "Своя история покупок")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Возвращаю айди новой корзины")
+    })
+    @Secured("ROLE_USER")
+    @GetMapping("/orders")
+    public ResponseEntity<Page<OrderDtoRes>> completeOrder(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                                           @PageableDefault Pageable pageable){
+        Page<OrderDtoRes> res = orderService.getSelfOrderList(customUserDetails.getUser(), pageable)
+                .map(OrderDtoRes::mapFromEntity);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
