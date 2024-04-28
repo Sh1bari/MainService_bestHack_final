@@ -6,6 +6,7 @@ import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
+import com.example.mainservice.models.models.responses.AchievementDtoRes;
 import com.example.mainservice.repositories.OrderRepo;
 import com.example.mainservice.repositories.UserRepo;
 import lombok.*;
@@ -50,10 +51,6 @@ public class UserService {
         user.setName(u.getName());
         user.setSurname(u.getSurname());
         user.setMiddleName(u.getMiddleName());
-        return userRepo.save(user);
-    }
-    public User getAchievement(User user){
-
         return userRepo.save(user);
     }
 

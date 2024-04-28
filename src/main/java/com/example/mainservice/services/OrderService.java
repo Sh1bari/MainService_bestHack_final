@@ -5,9 +5,15 @@ import com.example.mainservice.models.entities.ProductOrder;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.models.models.requests.ProductInOrderDtoReq;
+import com.example.mainservice.models.models.responses.AchievementDtoRes;
 import com.example.mainservice.repositories.OrderRepo;
 import com.example.mainservice.repositories.ProductOrderRepo;
 import com.example.mainservice.repositories.RegionRepo;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
 import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,5 +64,19 @@ public class OrderService {
     public Page<Order> getSelfOrderList(User user, Pageable pageable){
         Page<Order> res = orderRepo.findAllByUserAndOrderStatus(user, OrderStatus.COMPLETED, pageable);
         return res;
+    }
+    private final EntityManager entityManager;
+    public AchievementDtoRes calculateRansomAmount(User user) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Double> query = criteriaBuilder.createQuery(Double.class);
+        Root<Order> orderRoot = query.from(Order.class);
+        Join<Order, ProductOrder> productOrderJoin = orderRoot.join("productOrders");
+
+        query.select(criteriaBuilder.sum(productOrderJoin.get("totalPrice")))
+                .where(criteriaBuilder.equal(orderRoot.get("user"), user),
+                        criteriaBuilder.equal(orderRoot.get("orderStatus"), OrderStatus.COMPLETED));
+
+        Double totalAmount = entityManager.createQuery(query).getSingleResult();
+        return AchievementDtoRes.builder().ransomAmount(totalAmount).build();
     }
 }

@@ -1,14 +1,18 @@
 package com.example.mainservice.controllers;
 
+import com.example.mainservice.models.entities.Order;
+import com.example.mainservice.models.entities.ProductOrder;
 import com.example.mainservice.models.entities.User;
 import com.example.mainservice.models.enums.OrderStatus;
 import com.example.mainservice.models.models.requests.CreateUserDto;
 import com.example.mainservice.models.models.requests.UpdateUserDtoReq;
 import com.example.mainservice.models.models.responses.AchievementDtoRes;
 import com.example.mainservice.models.models.responses.OrderDtoRes;
+import com.example.mainservice.models.models.responses.ProductOrderDtoRes;
 import com.example.mainservice.models.models.responses.UserDtoRes;
 import com.example.mainservice.repositories.OrderRepo;
 import com.example.mainservice.security.CustomUserDetails;
+import com.example.mainservice.services.OrderService;
 import com.example.mainservice.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -34,6 +38,7 @@ public class UserController {
 
     private final UserService userService;
     private final OrderRepo orderRepo;
+    private final OrderService orderService;
 
     @Operation(summary = "Получить себя")
     @ApiResponses(value = {
@@ -62,17 +67,17 @@ public class UserController {
                 .body(res);
     }
 
-    /*@Operation(summary = "Получить достижения")
+    @Operation(summary = "Получить достижения")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
     @GetMapping("/user/achievement")
     public ResponseEntity<AchievementDtoRes> getAchievement(@AuthenticationPrincipal CustomUserDetails customUserDetails){
         User user = customUserDetails.getUser();
-        UserDtoRes res = UserDtoRes.mapFromEntity(userService.updateMe(user, req));
+        AchievementDtoRes res = orderService.calculateRansomAmount(user);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(res);
-    }*/
+    }
 
 }
