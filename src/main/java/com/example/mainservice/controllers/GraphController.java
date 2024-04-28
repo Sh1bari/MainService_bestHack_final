@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class GraphController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success")
     })
-    //TODO для админов
+    @Secured("ROLE_ADMIN")
     @GetMapping("/graph/products")
     public ResponseEntity<List<GraphTableDataElementDto>> getTableData(@RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SS")LocalDateTime startTime,
                                                                        @RequestParam(required = false)@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SS")LocalDateTime endTime,
