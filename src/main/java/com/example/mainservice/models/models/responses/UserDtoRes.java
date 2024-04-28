@@ -22,11 +22,13 @@ public class UserDtoRes {
     private String username;
     private List<String> roles;
     private OrderDtoRes bag;
+    private String phone;
 
     public static UserDtoRes mapFromEntity(User u){
         UserDtoRes res = UserDtoRes.builder()
                 .id(u.getId())
                 .name(u.getName())
+                .phone(u.getPhoneNumber())
                 .middleName(u.getMiddleName())
                 .surname(u.getSurname())
                 .username(u.getUsername())
