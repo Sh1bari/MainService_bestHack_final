@@ -1,11 +1,6 @@
 server:
   forward-headers-strategy: native
   port: 8081
-minio:
-  url: ${MINIO_URL:http://localhost:9000}
-  bucket: ${MINIO_BUCKET:file-storage}
-  username: ${MINIO_USERNAME:minioadmin}
-  password: ${MINIO_PASSWORD:minioadmin}
 spring:
   application:
     name: main-server

@@ -49,6 +49,10 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, orphanRemoval = true)
+    @JoinColumn(name = "file_id")
+    private File avatar;
+
     public User(String username,
                 String name,
                 String middleName,
