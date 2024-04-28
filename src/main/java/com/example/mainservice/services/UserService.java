@@ -39,7 +39,6 @@ public class UserService {
         user.setMiddleName(u.getMiddleName());
         user.setPhoneNumber(u.getPhoneNumber());
         user.getRoles().add(roleService.getUserRole());
-        user.getRoles().add(roleService.getAdminRole());
         Order order = new Order();
         order.setUser(user);
         order.setOrderStatus(OrderStatus.DRAFT);
