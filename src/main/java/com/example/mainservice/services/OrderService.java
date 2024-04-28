@@ -51,6 +51,7 @@ public class OrderService {
         order.getProductOrders().forEach(o->{
             o.setTotalPrice(o.getAmount()*o.getProduct().getPrice());
         });
+        order.setOrderStatus(OrderStatus.COMPLETED);
         order.setOrderTime(LocalDateTime.now());
         order.setRegion(regionService.findByName(region));
         orderRepo.save(order);
