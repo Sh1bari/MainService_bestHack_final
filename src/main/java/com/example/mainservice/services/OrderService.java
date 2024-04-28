@@ -56,8 +56,8 @@ public class OrderService {
         orderRepo.save(order);
 
         Order no = new Order();
-        order.setOrderStatus(OrderStatus.DRAFT);
-        order.setUser(user);
+        no.setOrderStatus(OrderStatus.DRAFT);
+        no.setUser(user);
         return orderRepo.save(no);
     }
     @Transactional
